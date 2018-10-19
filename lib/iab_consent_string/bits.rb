@@ -129,7 +129,7 @@ module IABConsentString
     end
 
     # @return [Integer] the number of bits in the bit string
-    def length()
+    def length
       @bytes.length * 8
     end
 
@@ -169,7 +169,7 @@ module IABConsentString
 
     # @return [String] a string representation of the byte array passed in the constructor. for example, a bit array of [4]
     #   yields a String of "0100"
-    def getBinaryString()
+    def getBinaryString
       s = String.new()
       size = length()
       for i in (0...size) do
@@ -182,7 +182,7 @@ module IABConsentString
       s
     end
 
-    def toByteArray()
+    def toByteArray
       return @bytes
     end
 

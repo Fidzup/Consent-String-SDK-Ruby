@@ -5,7 +5,13 @@ require 'iab_consent_string/consent/implementation/v1/byte_buffer_backed_vendor_
 
 module IABConsentString
   module Consent
+    # IABConsentString::Consent::VendorConsent decoder from Base64 string. Right now only version 1 is know, but eventually
+    # this can be extended to support new versions
     class VendorConsentDecoder
+      # Build a IABConsentString::Consent::VendorConsent object from a base64 string
+      # @params consentString [String] a url safe base64 encoded consent string
+      # @return [IABConsentString::Consent::VendorConsent] a VendorConsent object
+      # @raise an error when there's a problem with the consentString passed
       def self.fromBase64String(consentString)
         if consentString.nil?
           raise "Null or empty consent string passed as an argument"

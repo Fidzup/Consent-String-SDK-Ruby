@@ -1,5 +1,5 @@
 # Enumeration of currently defined purposes by IAB
-#  @see <a href="https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework">https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework</a>
+# @see <a href="https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework">https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework</a>
 module IABConsentString
   class Purpose
     # The storage of information, or access to information that is already stored, on user device such as accessing advertising identifiers

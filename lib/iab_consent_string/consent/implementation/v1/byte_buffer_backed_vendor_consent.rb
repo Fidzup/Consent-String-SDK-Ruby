@@ -12,39 +12,39 @@ module IABConsentString
             @bits = bits
           end
 
-          def getVersion()
+          def getVersion
             @bits.getInt(IABConsentString::GDPRConstants::VERSION_BIT_OFFSET,IABConsentString::GDPRConstants::VERSION_BIT_SIZE)
           end
 
-          def getConsentRecordCreated()
+          def getConsentRecordCreated
             @bits.getInstantFromEpochDeciseconds(IABConsentString::GDPRConstants::CREATED_BIT_OFFSET, IABConsentString::GDPRConstants::CREATED_BIT_SIZE)
           end
 
-          def getConsentRecordLastUpdated()
+          def getConsentRecordLastUpdated
             @bits.getInstantFromEpochDeciseconds(IABConsentString::GDPRConstants::UPDATED_BIT_OFFSET,IABConsentString::GDPRConstants::UPDATED_BIT_SIZE)
           end
 
-          def getCmpId()
+          def getCmpId
             @bits.getInt(IABConsentString::GDPRConstants::CMP_ID_OFFSET,IABConsentString::GDPRConstants::CMP_ID_SIZE)
           end
 
-          def getCmpVersion()
+          def getCmpVersion
             @bits.getInt(IABConsentString::GDPRConstants::CMP_VERSION_OFFSET,IABConsentString::GDPRConstants::CMP_VERSION_SIZE)
           end
 
-          def getConsentScreen()
+          def getConsentScreen
             @bits.getInt(IABConsentString::GDPRConstants::CONSENT_SCREEN_SIZE_OFFSET,IABConsentString::GDPRConstants::CONSENT_SCREEN_SIZE)
           end
 
-          def getConsentLanguage()
+          def getConsentLanguage
             @bits.getSixBitString(IABConsentString::GDPRConstants::CONSENT_LANGUAGE_OFFSET,IABConsentString::GDPRConstants::CONSENT_LANGUAGE_SIZE)
           end
 
-          def getVendorListVersion()
+          def getVendorListVersion
             @bits.getInt(IABConsentString::GDPRConstants::VENDOR_LIST_VERSION_OFFSET,IABConsentString::GDPRConstants::VENDOR_LIST_VERSION_SIZE)
           end
 
-          def getAllowedPurposeIds()
+          def getAllowedPurposeIds
             allowedPurposes = Set[]
             for i in (IABConsentString::GDPRConstants::PURPOSES_OFFSET...(IABConsentString::GDPRConstants::PURPOSES_OFFSET + IABConsentString::GDPRConstants::PURPOSES_SIZE)) do
               if (@bits.getBit(i))
@@ -54,15 +54,15 @@ module IABConsentString
             allowedPurposes
           end
 
-          def getAllowedPurposes()
+          def getAllowedPurposes
             getAllowedPurposeIds().map! {|id| IABConsentString::Purpose.new(id)}
           end
 
-          def getAllowedPurposesBits()
+          def getAllowedPurposesBits
             @bits.getInt(IABConsentString::GDPRConstants::PURPOSES_OFFSET,IABConsentString::GDPRConstants::PURPOSES_SIZE)
           end
 
-          def getMaxVendorId()
+          def getMaxVendorId
             @bits.getInt(IABConsentString::GDPRConstants::MAX_VENDOR_ID_OFFSET,IABConsentString::GDPRConstants::MAX_VENDOR_ID_SIZE)
           end
 
@@ -90,15 +90,15 @@ module IABConsentString
             end
           end
 
-          def toByteArray()
+          def toByteArray
             @bits.toByteArray()
           end
 
-          def hashCode()
+          def hashCode
             @bit.toByteArray().toString().hash
           end
 
-          def toString()
+          def toString
             "ByteBufferVendorConsent{" +
                 "Version=" + getVersion().to_s +
                 ",Created=" + getConsentRecordCreated().to_s +
@@ -115,7 +115,7 @@ module IABConsentString
           end
 
           private
-          def encodingType()
+          def encodingType
             @bits.getInt(IABConsentString::GDPRConstants::ENCODING_TYPE_OFFSET, IABConsentString::GDPRConstants::ENCODING_TYPE_SIZE)
           end
 
