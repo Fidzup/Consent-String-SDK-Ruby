@@ -119,13 +119,13 @@ module IABConsentString
     # @param size [Integer] the number of bits to interpret
     # @return [void]
     # @raise [VendorConsentParseError] when the number of bits requested cannot fit in a long
-    def getInstantFromEpochDeciseconds(startInclusive,size)
+    def getDateTimeFromEpochDeciseconds(startInclusive,size)
       epochDemi = getLong(startInclusive, size)
       epochDemi * 100
     end
 
-    def setInstantToEpochDeciseconds(startInclusive, size, instant)
-      setLong(startInclusive, size, instant / 100)
+    def setDateTimeToEpochDeciseconds(startInclusive, size, dateTime)
+      setLong(startInclusive, size, dateTime / 100)
     end
 
     # @return [Integer] the number of bits in the bit string
@@ -183,7 +183,7 @@ module IABConsentString
     end
 
     def toByteArray
-      return @bytes
+      @bytes
     end
 
     def setNumber(startInclusive,size,to)
