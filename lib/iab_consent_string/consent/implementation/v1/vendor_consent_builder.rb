@@ -1,3 +1,4 @@
+require 'iab_consent_string/gdpr_constants'
 require 'iab_consent_string/error/vendor_consent_create_error'
 
 module IABConsentString
@@ -9,7 +10,7 @@ module IABConsentString
           VERSION = 1
 
           # With creation date
-          # @param consentRecordCreated [Timestamp] Epoch deciseconds when record was created
+          # @param consentRecordCreated [DateTime] Epoch deciseconds when record was created
           # @return [VendorConsentBuilder] self
           def withConsentRecordCreatedOn(consentRecordCreated)
             @consentRecordCreated = consentRecordCreated
@@ -17,7 +18,7 @@ module IABConsentString
           end
 
           # With update date
-          # @param consentRecordLastUpdated [Timestamp] Epoch deciseconds when consent string was last updated
+          # @param consentRecordLastUpdated [DateTime] Epoch deciseconds when consent string was last updated
           # @return [VendorConsentBuilder] self
           def withConsentRecordLastUpdatedOn(consentRecordLastUpdated)
             @consentRecordLastUpdated = consentRecordLastUpdated;
@@ -75,6 +76,49 @@ module IABConsentString
             self
           end
 
+          # With max vendor ID
+          # @param maxVendorId [Integer] The maximum VendorId for which consent values are given.
+          # @return [VendorConsentBuilder] self
+          def withMaxVendorId(maxVendorId)
+            this.maxVendorId = maxVendorId
+            self
+          end
+
+          # With vendor encoding type
+          # @param vendorEncodingType [Integer] 0=BitField 1=Range
+          # @return [VendorConsentBuilder] self
+          def withVendorEncodingType(vendorEncodingType)
+            if (vendorEncodingType < 0 || vendorEncodingType > 1)
+              raise "Illegal value for argument vendorEncodingType:" + vendorEncodingType.to_s
+            end
+            @vendorEncodingType = vendorEncodingType
+            self
+          end
+
+          # With bit field entries
+          # @param bitFieldEntries [Set<Integer>] set of VendorIds for which the vendors have consent
+          # @return [VendorConsentBuilder] self
+          def withBitField(bitFieldEntries)
+            @vendorsBitField = bitFieldEntries
+            self
+          end
+
+          # With range entries
+          # @param rangeEntries [Set<RangeEntry>] List of VendorIds or a range of VendorIds for which the vendors have consent
+          # @return [VendorConsentBuilder] self
+          def withRangeEntries(rangeEntries)
+            @rangeEntries = rangeEntries
+            self
+          end
+
+          # With default consent
+          # @param defaultConsent [Boolean] Default consent for VendorIds not covered by a RangeEntry. 0=No Consent 1=Consent
+          # @return [VendorConsentBuilder] self
+          def withDefaultConsent(defaultConsent)
+            @defaultConsent = defaultConsent
+            self
+          end
+
           # Validate supplied values and build VendorConsent object
           # @return [IABConsentString::Consent::VendorConsent] vendor consent object
           def build
@@ -89,21 +133,21 @@ module IABConsentString
             end
 
             if @vendorListVersion.nil? || @vendorListVersion <=0
-              raise IABConsentString::Error::VendorConsentCreateError, "Invalid value for vendorListVersion:" + @vendorListVersion, caller
+              raise IABConsentString::Error::VendorConsentCreateError, "Invalid value for vendorListVersion:" + @vendorListVersion.to_s, caller
             end
 
             if @maxVendorId.nil? || @maxVendorId<=0
-              raise IABConsentString::Error::VendorConsentCreateError, "Invalid value for maxVendorId:" + @maxVendorId, caller
+              raise IABConsentString::Error::VendorConsentCreateError, "Invalid value for maxVendorId:" + @maxVendorId.to_s, caller
             end
 
             # For range encoding, check if each range entry is valid
             if @vendorEncodingType == IABConsentString::GDPRConstants::VENDOR_ENCODING_RANGE
               if @rangeEntries.nil?
-                @raise IABConsentString::Error::VendorConsentCreateError, "Range entries  must be set", caller
+                raise IABConsentString::Error::VendorConsentCreateError, "Range entries  must be set", caller
               end
               @rangeEntries.each do |rangeEntry|
                 if !rangeEntry.valid(@maxVendorId)
-                  @raise IABConsentString::Error::VendorConsentCreateError, "Invalid range entries found", caller
+                  raise IABConsentString::Error::VendorConsentCreateError, "Invalid range entries found", caller
                 end
               end
             end
@@ -115,9 +159,9 @@ module IABConsentString
               @rangeEntries.each do |rangeEntry|
                 rangeEntrySectionSize += rangeEntry.size
               end
-              bitBufferSizeInBits = IABConsentString::GDPRConstants::RANGE_ENTRY_OFFSET + rangeEntrySectionSize
+              bitBufferSizeInBits = IABConsentString::GDPRConstants::RANGE_ENTRY_OFFSET + rangeEntrySectionSize.to_s
             else
-              bitBufferSizeInBits = IABConsentString::GDPRConstants::VENDOR_BITFIELD_OFFSET + @maxVendorId
+              bitBufferSizeInBits = IABConsentString::GDPRConstants::VENDOR_BITFIELD_OFFSET + @maxVendorId.to_s
             end
 
             # Create new bit buffer
@@ -126,8 +170,8 @@ module IABConsentString
 
             # Set fields in bit buffer
             bits.setInt(IABConsentString::GDPRConstants::VERSION_BIT_OFFSET, IABConsentString::GDPRConstants::VERSION_BIT_SIZE, VERSION)
-            bits.setInstantToEpochDeciseconds(IABConsentString::GDPRConstants::CREATED_BIT_OFFSET, IABConsentString::GDPRConstants::CREATED_BIT_SIZE, @consentRecordCreated)
-            bits.setInstantToEpochDeciseconds(IABConsentString::GDPRConstants::UPDATED_BIT_OFFSET, IABConsentString::GDPRConstants::UPDATED_BIT_SIZE, @consentRecordLastUpdated)
+            bits.setDateTimeToEpochDeciseconds(IABConsentString::GDPRConstants::CREATED_BIT_OFFSET, IABConsentString::GDPRConstants::CREATED_BIT_SIZE, @consentRecordCreated)
+            bits.setDateTimeToEpochDeciseconds(IABConsentString::GDPRConstants::UPDATED_BIT_OFFSET, IABConsentString::GDPRConstants::UPDATED_BIT_SIZE, @consentRecordLastUpdated)
             bits.setInt(IABConsentString::GDPRConstants::CMP_ID_OFFSET, IABConsentString::GDPRConstants::CMP_ID_SIZE, @cmpID)
             bits.setInt(IABConsentString::GDPRConstants::CMP_VERSION_OFFSET, IABConsentString::GDPRConstants::CMP_VERSION_SIZE, @cmpVersion)
             bits.setInt(IABConsentString::GDPRConstants::CONSENT_SCREEN_SIZE_OFFSET, IABConsentString::GDPRConstants::CONSENT_SCREEN_SIZE, @consentScreenID)
@@ -172,7 +216,8 @@ module IABConsentString
               end
             end
 
-          ByteBufferBackedVendorConsent.new(bits);
+            ByteBufferBackedVendorConsent.new(bits)
+          end
         end
       end
     end

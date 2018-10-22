@@ -1,4 +1,5 @@
 require 'set'
+require 'date'
 require 'iab_consent_string/bits'
 require 'iab_consent_string/gdpr_constants'
 require 'iab_consent_string/consent/vendor_consent'
@@ -17,11 +18,11 @@ module IABConsentString
           end
 
           def getConsentRecordCreated
-            @bits.getInstantFromEpochDeciseconds(IABConsentString::GDPRConstants::CREATED_BIT_OFFSET, IABConsentString::GDPRConstants::CREATED_BIT_SIZE)
+            @bits.getDateTimeFromEpochDeciseconds(IABConsentString::GDPRConstants::CREATED_BIT_OFFSET, IABConsentString::GDPRConstants::CREATED_BIT_SIZE)
           end
 
           def getConsentRecordLastUpdated
-            @bits.getInstantFromEpochDeciseconds(IABConsentString::GDPRConstants::UPDATED_BIT_OFFSET,IABConsentString::GDPRConstants::UPDATED_BIT_SIZE)
+            @bits.getDateTimeFromEpochDeciseconds(IABConsentString::GDPRConstants::UPDATED_BIT_OFFSET,IABConsentString::GDPRConstants::UPDATED_BIT_SIZE)
           end
 
           def getCmpId
@@ -86,7 +87,7 @@ module IABConsentString
               present = isVendorPresentInRange(vendorId)
               return (present != defaultConsent)
             else
-              return bits.getBit(IABConsentString::GDPRConstants::VENDOR_BITFIELD_OFFSET + vendorId - 1)
+              return @bits.getBit(IABConsentString::GDPRConstants::VENDOR_BITFIELD_OFFSET + vendorId - 1)
             end
           end
 
@@ -120,16 +121,16 @@ module IABConsentString
           end
 
           def isVendorPresentInRange(vendorId)
-            numEntries = bits.getInt(IABConsentString::GDPRConstants::NUM_ENTRIES_OFFSET, IABConsentString::GDPRConstants::NUM_ENTRIES_SIZE)
+            numEntries = @bits.getInt(IABConsentString::GDPRConstants::NUM_ENTRIES_OFFSET, IABConsentString::GDPRConstants::NUM_ENTRIES_SIZE)
             maxVendorId = getMaxVendorId()
             currentOffset = IABConsentString::GDPRConstants::RANGE_ENTRY_OFFSET
             for i in (0...numEntries) do
               range = @bits.getBit(currentOffset)
               currentOffset += 1
               if range
-                startVendorId = bits.getInt(currentOffset, IABConsentString::GDPRConstants::VENDOR_ID_SIZE)
+                startVendorId = @bits.getInt(currentOffset, IABConsentString::GDPRConstants::VENDOR_ID_SIZE)
                 currentOffset += IABConsentString::GDPRConstants::VENDOR_ID_SIZE
-                endVendorId = bits.getInt(currentOffset, IABConsentString::GDPRConstants::VENDOR_ID_SIZE)
+                endVendorId = @bits.getInt(currentOffset, IABConsentString::GDPRConstants::VENDOR_ID_SIZE)
                 currentOffset += IABConsentString::GDPRConstants::VENDOR_ID_SIZE
 
                 if ((startVendorId > endVendorId) || (endVendorId > maxVendorId))
