@@ -1,4 +1,4 @@
-![GitHub release](https://img.shields.io/github/release/Fidzup/Consent-String-SDK-Ruby.svg)
+![GitHub release](https://img.shields.io/github/release/Fidzup/Consent-String-SDK-Ruby.svg) ![RubyGem release](https://img.shields.io/gem/v/iab_consent_string.svg)
 
 # Transparency and Consent Framework: Consent-String-SDK-Ruby
 
