@@ -13,10 +13,10 @@ This library supports the version v1.1 of the specification. It can encode and d
   s.email       = 'coding.stars@fidzup.com'
   s.files       = [
     "lib/iab_consent_string.rb",
-    "lib/iab_consent_string/vendor_consent.rb",
     "lib/iab_consent_string/bits.rb",
     "lib/iab_consent_string/purpose.rb",
     "lib/iab_consent_string/gdpr_constants.rb",
+    "lib/iab_consent_string/util/utils.rb",
     "lib/iab_consent_string/error/vendor_consent_create_error.rb",
     "lib/iab_consent_string/error/vendor_consent_parse_error.rb",
     "lib/iab_consent_string/error/vendor_consent_error.rb",
