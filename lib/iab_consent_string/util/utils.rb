@@ -11,7 +11,7 @@ module IABConsentString
         bitsFit = (length % 8) == 0
         str = ""
         for i in (0...length / 8 + (bitsFit ? 0 : 1)) do
-          str << " "
+          str << 0b00000000
         end
         bits = IABConsentString::Bits.new(str.bytes.to_a)
         for i in (0...length) do

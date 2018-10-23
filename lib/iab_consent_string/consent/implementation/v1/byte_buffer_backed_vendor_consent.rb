@@ -56,7 +56,8 @@ module IABConsentString
           end
 
           def getAllowedPurposes
-            getAllowedPurposeIds().map! {|id| IABConsentString::Purpose.new(id)}
+            allowedPurposes = getAllowedPurposeIds().map! {|id| IABConsentString::Purpose.new(id)}
+            allowedPurposes.to_a.uniq{|o| [o.getId]}.to_set
           end
 
           def getAllowedPurposesBits

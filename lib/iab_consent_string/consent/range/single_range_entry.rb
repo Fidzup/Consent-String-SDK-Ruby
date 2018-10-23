@@ -25,7 +25,7 @@ module IABConsentString
         end
 
         def valid(maxVendorId)
-          (@singeVendorId > 0) && (@singeVendorId <= maxVendorId)
+          (@singleVendorId > 0) && (@singleVendorId <= maxVendorId)
         end
       end
     end

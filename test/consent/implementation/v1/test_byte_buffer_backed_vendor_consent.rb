@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'iab_consent_string'
 require 'date'
+require 'set'
 
 class ByteBufferBackedVendorConsentTest < Minitest::Test
 
@@ -18,8 +19,8 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_getConsentRecordCreated
     # Given: created date of Monday, June 4, 2018 12:00:00 AM, epoch = 1528070400
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "0000"
+      "001110001110110011010000101000000000" + # Created
+      "0000"
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -31,9 +32,9 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_getConsentRecordLastUpdated
     # Given: updated date of Monday, June 4, 2018 12:00:00 AM, epoch = 1528070400
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "0000"
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "0000"
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -45,10 +46,10 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_getCmpId
     # Given: CMP ID of 15
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" +  # Created
-            "001110001110110011010000101000000000" +  # Updated
-            "000000001111"                         +  # CMP ID
-            "0000"
+      "001110001110110011010000101000000000" +  # Created
+      "001110001110110011010000101000000000" +  # Updated
+      "000000001111"                         +  # CMP ID
+      "0000"
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -60,11 +61,11 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_getCmpVersion
     # Given: CMP version of 5
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "000000001111"                         + # CMP ID
-            "000000000101"                         + # CMP version
-            "0000"
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "0000"
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -76,12 +77,12 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_getConsentScreen
     # Given: content screen ID of 18
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "000000001111"                         + # CMP ID
-            "000000000101"                         + # CMP version
-            "010010"                               + # Content screen ID
-            "0000"
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "0000"
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -93,13 +94,13 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_getConsentLanguage
     # Given: language code of EN
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "000000001111"                         + # CMP ID
-            "000000000101"                         + # CMP version
-            "010010"                               + # Content screen ID
-            "000100001101"                         + # Language code
-            "0000"
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "0000"
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -111,42 +112,49 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_getVendorListVersion
     # Given: vendor list version of 150
     binaryString = "000011" + # Version
-              "001110001110110011010000101000000000" + # Created
-              "001110001110110011010000101000000000" + # Updated
-              "000000001111"                         + # CMP ID
-              "000000000101"                         + # CMP version
-              "010010"                               + # Content screen ID
-              "000100001101"                         + # Language code
-              "000010010110"                         + # vendor list version
-              "0000"
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # vendor list version
+      "0000"
 
-      # When: object is constructed
-      vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+   # When: object is constructed
+   vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
-      # Then: correct vendor list version is returned
-      assert_equal(150,vendorConsent.getVendorListVersion())
+   # Then: correct vendor list version is returned
+   assert_equal(150,vendorConsent.getVendorListVersion())
   end
 
   def test_getAllowedPurposes
     # Given: allowed purposes of 1,2,3,4,5,15,24
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "000000001111"                         + # CMP ID
-            "000000000101"                         + # CMP version
-            "010010"                               + # Content screen ID
-            "000100001101"                         + # Language code
-            "000010010110"                         + # Vendor list version
-            "111110000000001000000001"             + # Allowed purposes bitmap
-            "0000"
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # Vendor list version
+      "111110000000001000000001"             + # Allowed purposes bitmap
+      "0000"
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
     # Then: correct allowed versions are returned
-    
-    #assertThat(vendorConsent.getAllowedPurposeIds(),is(new HashSet<>(Arrays.asList(1,2,3,4,5,15,24))));
-    #assertThat(vendorConsent.getAllowedPurposes(),is(new HashSet<>(Arrays.asList(STORAGE_AND_ACCESS,PERSONALIZATION,AD_SELECTION,CONTENT_DELIVERY,MEASUREMENT,UNDEFINED))));
+    assert_equal(Set[1,2,3,4,5,15,24],vendorConsent.getAllowedPurposeIds())
+    expectedAllowedPurposes = [
+                   IABConsentString::Purpose.new(IABConsentString::Purpose::STORAGE_AND_ACCESS),
+                   IABConsentString::Purpose.new(IABConsentString::Purpose::PERSONALIZATION),
+                   IABConsentString::Purpose.new(IABConsentString::Purpose::AD_SELECTION),
+                   IABConsentString::Purpose.new(IABConsentString::Purpose::CONTENT_DELIVERY),
+                   IABConsentString::Purpose.new(IABConsentString::Purpose::MEASUREMENT),
+                   IABConsentString::Purpose.new(IABConsentString::Purpose::UNDEFINED)
+                 ] 
+    assert_equal(expectedAllowedPurposes, vendorConsent.getAllowedPurposes().to_a)
     assert_equal(16253441,vendorConsent.getAllowedPurposesBits())
     assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(1))==true)
     assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(IABConsentString::Purpose::STORAGE_AND_ACCESS))==true)
@@ -158,23 +166,23 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
     assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(IABConsentString::Purpose::CONTENT_DELIVERY))==true)
     assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(5))==true)
     assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(IABConsentString::Purpose::MEASUREMENT))==true)
-    assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(15))==true)
-    assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(24))==true)
+    assert(vendorConsent.isPurposeIdAllowed(15)==true)
+    assert(vendorConsent.isPurposeIdAllowed(24)==true)
   end
 
   def test_getMaxVendorId
       # Given: max vendor ID of 382
       binaryString = "000011" + # Version
-              "001110001110110011010000101000000000" + # Created
-              "001110001110110011010000101000000000" + # Updated
-              "000000001111"                         + # CMP ID
-              "000000000101"                         + # CMP version
-              "010010"                               + # Content screen ID
-              "000100001101"                         + # Language code
-              "000010010110"                         + # Vendor list version
-              "111110000000001000000001"             + # Allowed purposes bitmap
-              "0000000101111110"                     + # Max vendor ID
-              "0000"
+        "001110001110110011010000101000000000" + # Created
+        "001110001110110011010000101000000000" + # Updated
+        "000000001111"                         + # CMP ID
+        "000000000101"                         + # CMP version
+        "010010"                               + # Content screen ID
+        "000100001101"                         + # Language code
+        "000010010110"                         + # Vendor list version
+        "111110000000001000000001"             + # Allowed purposes bitmap
+        "0000000101111110"                     + # Max vendor ID
+        "0000"
 
       # When: object is constructed
       vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -186,17 +194,17 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_BitFieldEncoding
     # Given: vendors 1,25 and 30 in bit field, with max vendor of of 32
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "000000001111"                         + # CMP ID
-            "000000000101"                         + # CMP version
-            "010010"                               + # Content screen ID
-            "000100001101"                         + # Language code
-            "000010010110"                         + # Vendor list version
-            "111110000000001000000001"             + # Allowed purposes bitmap
-            "0000000000100000"                     + # Max vendor ID
-            "0"                                    + # Bit field encoding
-            "10000000000000000000000010000100"       # Vendor bits in bit field
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # Vendor list version
+      "111110000000001000000001"             + # Allowed purposes bitmap
+      "0000000000100000"                     + # Max vendor ID
+      "0"                                    + # Bit field encoding
+      "10000000000000000000000010000100"       # Vendor bits in bit field
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -223,23 +231,23 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_RangeEncodingDefaultFalse
     # Given: vendors 1-25 and 30 with consent, with max vendor IF of 32
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "000000001111"                         + # CMP ID
-            "000000000101"                         + # CMP version
-            "010010"                               + # Content screen ID
-            "000100001101"                         + # Language code
-            "000010010110"                         + # Vendor list version
-            "111110000000001000000001"             + # Allowed purposes bitmap
-            "0000000000100000"                     + # Max vendor ID
-            "1"                                    + # Range encoding
-            "0"                                    + # Default 0=No Consent
-            "000000000010"                         + # Number of entries = 2
-            "1"                                    + # First entry range = 1
-            "0000000000000001"                     + # First entry from = 1
-            "0000000000011001"                     + # First entry to = 25
-            "0"                                    + # Second entry single = 0
-            "0000000000011110"                       # Second entry value = 30
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # Vendor list version
+      "111110000000001000000001"             + # Allowed purposes bitmap
+      "0000000000100000"                     + # Max vendor ID
+      "1"                                    + # Range encoding
+      "0"                                    + # Default 0=No Consent
+      "000000000010"                         + # Number of entries = 2
+      "1"                                    + # First entry range = 1
+      "0000000000000001"                     + # First entry from = 1
+      "0000000000011001"                     + # First entry to = 25
+      "0"                                    + # Second entry single = 0
+      "0000000000011110"                       # Second entry value = 30
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -267,23 +275,23 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_RangeEncodingDefaultTrue
     # Given: vendors 1 and 25-30 without consent, with max vendor IF of 32
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "000000001111"                         + # CMP ID
-            "000000000101"                         + # CMP version
-            "010010"                               + # Content screen ID
-            "000100001101"                         + # Language code
-            "000010010110"                         + # Vendor list version
-            "111110000000001000000001"             + # Allowed purposes bitmap
-            "0000000000100000"                     + # Max vendor ID
-            "1"                                    + # Range encoding
-            "1"                                    + # Default 1=Consent
-            "000000000010"                         + # Number of entries = 2
-            "0"                                    + # First entry single = 0
-            "0000000000000001"                     + # First entry value = 1
-            "1"                                    + # Second entry range = 1
-            "0000000000011001"                     + # Second entry from = 25
-            "0000000000011110"                       # Second entry to = 30
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # Vendor list version
+      "111110000000001000000001"             + # Allowed purposes bitmap
+      "0000000000100000"                     + # Max vendor ID
+      "1"                                    + # Range encoding
+      "1"                                    + # Default 1=Consent
+      "000000000010"                         + # Number of entries = 2
+      "0"                                    + # First entry single = 0
+      "0000000000000001"                     + # First entry value = 1
+      "1"                                    + # Second entry range = 1
+      "0000000000011001"                     + # Second entry from = 25
+      "0000000000011110"                       # Second entry to = 30
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -311,23 +319,23 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_InvalidVendorId1
     # Given: invalid vendor ID in range
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "000000001111"                         + # CMP ID
-            "000000000101"                         + # CMP version
-            "010010"                               + # Content screen ID
-            "000100001101"                         + # Language code
-            "000010010110"                         + # Vendor list version
-            "111110000000001000000001"             + # Allowed purposes bitmap
-            "0000000000100000"                     + # Max vendor ID
-            "1"                                    + # Range encoding
-            "1"                                    + # Default 1=Consent
-            "000000000010"                         + # Number of entries = 2
-            "0"                                    + # First entry single = 0
-            "0000000000000001"                     + # First entry value = 1
-            "1"                                    + # Second entry range = 1
-            "0000000000101000"                     + # Second entry from = 40 - INVALID
-            "0000000000011110"                       # Second entry to = 30
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # Vendor list version
+      "111110000000001000000001"             + # Allowed purposes bitmap
+      "0000000000100000"                     + # Max vendor ID
+      "1"                                    + # Range encoding
+      "1"                                    + # Default 1=Consent
+      "000000000010"                         + # Number of entries = 2
+      "0"                                    + # First entry single = 0
+      "0000000000000001"                     + # First entry value = 1
+      "1"                                    + # Second entry range = 1
+      "0000000000101000"                     + # Second entry from = 40 - INVALID
+      "0000000000011110"                       # Second entry to = 30
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -342,23 +350,23 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
   def test_InvalidVendorId2
     # Given: invalid vendor ID in range
     binaryString = "000011" + # Version
-            "001110001110110011010000101000000000" + # Created
-            "001110001110110011010000101000000000" + # Updated
-            "000000001111"                         + # CMP ID
-            "000000000101"                         + # CMP version
-            "010010"                               + # Content screen ID
-            "000100001101"                         + # Language code
-            "000010010110"                         + # Vendor list version
-            "111110000000001000000001"             + # Allowed purposes bitmap
-            "0000000000100000"                     + # Max vendor ID
-            "1"                                    + # Range encoding
-            "1"                                    + # Default 1=Consent
-            "000000000010"                         + # Number of entries = 2
-            "0"                                    + # First entry single = 0
-            "0000000000101000"                     + # First entry value = 40 - INVALID
-            "1"                                    + # Second entry range = 1
-            "0000000000011001"                     + # Second entry from = 25
-            "0000000000011110"                       # Second entry to = 30
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # Vendor list version
+      "111110000000001000000001"             + # Allowed purposes bitmap
+      "0000000000100000"                     + # Max vendor ID
+      "1"                                    + # Range encoding
+      "1"                                    + # Default 1=Consent
+      "000000000010"                         + # Number of entries = 2
+      "0"                                    + # First entry single = 0
+      "0000000000101000"                     + # First entry value = 40 - INVALID
+      "1"                                    + # Second entry range = 1
+      "0000000000011001"                     + # Second entry from = 25
+      "0000000000011110"                       # Second entry to = 30
 
     # When: object is constructed
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
@@ -401,7 +409,7 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
 
     assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(2))==true)
     assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(1))==false)
-    assert(vendorConsent.isPurposeAllowed(IABConsentString::Purpose.new(21))==true)
+    assert(vendorConsent.isPurposeIdAllowed(21)==true)
     assert(vendorConsent.isVendorAllowed(1)==true)
     assert(vendorConsent.isVendorAllowed(5)==true)
     assert(vendorConsent.isVendorAllowed(7)==true)
@@ -523,7 +531,6 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
     assert(vendorConsent.isVendorAllowed(228)==true)
     assert(vendorConsent.isVendorAllowed(253)==true)
     assert(vendorConsent.isVendorAllowed(1000)==true)
-
-#      assertThat(vendorConsent.getAllowedPurposeIds(),is(new HashSet<>(Arrays.asList(1,2,3,4,5))));
+    assert_equal(Set[1,2,3,4,5],vendorConsent.getAllowedPurposeIds())
   end
 end

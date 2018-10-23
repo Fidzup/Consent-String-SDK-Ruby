@@ -1,5 +1,6 @@
 require 'iab_consent_string/gdpr_constants'
 require 'iab_consent_string/error/vendor_consent_create_error'
+require 'iab_consent_string/consent/implementation/v1/byte_buffer_backed_vendor_consent'
 
 module IABConsentString
   module Consent
@@ -30,6 +31,22 @@ module IABConsentString
           # @return [VendorConsentBuilder] self
           def withCmpVersion(cmpVersion)
             @cmpVersion = cmpVersion
+            self
+          end
+
+          # With CMP Id
+          # @param cmpId [Integer] Consent Manager Provider Id
+          # @return [VendorConsentBuilder] self
+          def withCmpId(cmpId)
+            @cmpId = cmpId
+            self
+          end
+
+          # With Consent Screen Id
+          # @param consentScreenId [Integer] Consent Screen Id
+          # @return [VendorConsentBuilder] self
+          def withConsentScreenId(consentScreenId)
+            @consentScreenId = consentScreenId
             self
           end
 
@@ -80,7 +97,7 @@ module IABConsentString
           # @param maxVendorId [Integer] The maximum VendorId for which consent values are given.
           # @return [VendorConsentBuilder] self
           def withMaxVendorId(maxVendorId)
-            this.maxVendorId = maxVendorId
+            @maxVendorId = maxVendorId
             self
           end
 
@@ -159,22 +176,26 @@ module IABConsentString
               @rangeEntries.each do |rangeEntry|
                 rangeEntrySectionSize += rangeEntry.size
               end
-              bitBufferSizeInBits = IABConsentString::GDPRConstants::RANGE_ENTRY_OFFSET + rangeEntrySectionSize.to_s
+              bitBufferSizeInBits = IABConsentString::GDPRConstants::RANGE_ENTRY_OFFSET + rangeEntrySectionSize
             else
-              bitBufferSizeInBits = IABConsentString::GDPRConstants::VENDOR_BITFIELD_OFFSET + @maxVendorId.to_s
+              bitBufferSizeInBits = IABConsentString::GDPRConstants::VENDOR_BITFIELD_OFFSET + @maxVendorId
             end
 
             # Create new bit buffer
             bitsFit = (bitBufferSizeInBits % 8) == 0
-            bits = Bits.new(Array.new(bitBufferSizeInBits / 8 + (bitsFit ? 0 : 1)))
+            str = ""
+            for i in (0...(bitBufferSizeInBits / 8 + (bitsFit ? 0 : 1))) do
+              str << 0b00000000
+            end
+            bits = IABConsentString::Bits.new(str.bytes.to_a)
 
             # Set fields in bit buffer
             bits.setInt(IABConsentString::GDPRConstants::VERSION_BIT_OFFSET, IABConsentString::GDPRConstants::VERSION_BIT_SIZE, VERSION)
             bits.setDateTimeToEpochDeciseconds(IABConsentString::GDPRConstants::CREATED_BIT_OFFSET, IABConsentString::GDPRConstants::CREATED_BIT_SIZE, @consentRecordCreated)
             bits.setDateTimeToEpochDeciseconds(IABConsentString::GDPRConstants::UPDATED_BIT_OFFSET, IABConsentString::GDPRConstants::UPDATED_BIT_SIZE, @consentRecordLastUpdated)
-            bits.setInt(IABConsentString::GDPRConstants::CMP_ID_OFFSET, IABConsentString::GDPRConstants::CMP_ID_SIZE, @cmpID)
+            bits.setInt(IABConsentString::GDPRConstants::CMP_ID_OFFSET, IABConsentString::GDPRConstants::CMP_ID_SIZE, @cmpId)
             bits.setInt(IABConsentString::GDPRConstants::CMP_VERSION_OFFSET, IABConsentString::GDPRConstants::CMP_VERSION_SIZE, @cmpVersion)
-            bits.setInt(IABConsentString::GDPRConstants::CONSENT_SCREEN_SIZE_OFFSET, IABConsentString::GDPRConstants::CONSENT_SCREEN_SIZE, @consentScreenID)
+            bits.setInt(IABConsentString::GDPRConstants::CONSENT_SCREEN_SIZE_OFFSET, IABConsentString::GDPRConstants::CONSENT_SCREEN_SIZE, @consentScreenId)
             bits.setSixBitString(IABConsentString::GDPRConstants::CONSENT_LANGUAGE_OFFSET, IABConsentString::GDPRConstants::CONSENT_LANGUAGE_SIZE, @consentLanguage)
             bits.setInt(IABConsentString::GDPRConstants::VENDOR_LIST_VERSION_OFFSET, IABConsentString::GDPRConstants::VENDOR_LIST_VERSION_SIZE, @vendorListVersion)
 
@@ -194,9 +215,9 @@ module IABConsentString
             if (@vendorEncodingType == IABConsentString::GDPRConstants::VENDOR_ENCODING_RANGE)
               # Range encoding
               if (@defaultConsent)
-                bits.setBits(IABConsentString::GDPRConstants::DEFAULT_CONSENT_OFFSET)
+                bits.setBit(IABConsentString::GDPRConstants::DEFAULT_CONSENT_OFFSET)
               else
-                bits.unsetBits(IABConsentString::GDPRConstants::DEFAULT_CONSENT_OFFSET)
+                bits.unsetBit(IABConsentString::GDPRConstants::DEFAULT_CONSENT_OFFSET)
               end
               bits.setInt(IABConsentString::GDPRConstants::NUM_ENTRIES_OFFSET, IABConsentString::GDPRConstants::NUM_ENTRIES_SIZE, @rangeEntries.size)
 
@@ -216,7 +237,7 @@ module IABConsentString
               end
             end
 
-            ByteBufferBackedVendorConsent.new(bits)
+            IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(bits)
           end
         end
       end

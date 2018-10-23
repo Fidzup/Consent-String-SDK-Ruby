@@ -27,11 +27,24 @@ module IABConsentString
     UNDEFINED = -1
 
     def initialize(id)
-      @id = id
+      case id
+      when STORAGE_AND_ACCESS, PERSONALIZATION, AD_SELECTION, CONTENT_DELIVERY, MEASUREMENT, GEOLOCALIZED_ADS
+        @id = id
+      else
+        @id = -1
+      end
     end
 
-    def getId()
+    def getId
       @id
+    end
+
+    def eql?(other)
+      @id == other.getId
+    end
+
+    def ==(other)
+      @id == other.getId
     end
 
     def valueOf()

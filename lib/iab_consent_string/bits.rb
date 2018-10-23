@@ -162,7 +162,7 @@ module IABConsentString
       end
       values = to.chars
       for i in (0...values.length) do
-        charCode = values[i] - 65
+        charCode = values[i].ord - 65
         setInt(startInclusive + (i * 6), 6, charCode)
       end
    end 
@@ -187,7 +187,7 @@ module IABConsentString
     end
 
     def setNumber(startInclusive,size,to)
-      for i in ((size - 1)..0) do
+      (size - 1).downto(0) do |i|
         index = startInclusive + i
         byteIndex = index / 8
         shift = (byteIndex + 1) * 8 - index - 1
