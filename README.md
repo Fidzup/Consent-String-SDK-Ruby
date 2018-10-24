@@ -51,7 +51,7 @@ require 'iab_consent_string'
 
 vendorConsent = IABConsentString::Consent::VendorConsentDecoder.fromBase64String(consentString);
 
-if (vendorConsent.isVendorAllowed(vendorId) && vendorConsent.isPurposeIdAllowed(IABConsentString::GDPRConstants::STORAGE_AND_ACCESS)
+if (vendorConsent.isVendorAllowed(vendorId) && vendorConsent.isPurposeIdAllowed(IABConsentString::Purpose::STORAGE_AND_ACCESS))
    ...
 else
    ...
