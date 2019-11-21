@@ -55,6 +55,22 @@ module IABConsentString
             allowedPurposes
           end
 
+          def getAllowedVendorIds
+            allowedVendors = Set[]
+            if (encodingType() == IABConsentString::GDPRConstants::VERSION_BIT_OFFSET)
+              for i in (IABConsentString::GDPRConstants::VENDOR_BITFIELD_OFFSET...(IABConsentString::GDPRConstants::VENDOR_BITFIELD_OFFSET + getMaxVendorId())) do
+                if (@bits.getBit(i))
+                  allowedVendors.add(i - IABConsentString::GDPRConstants::VENDOR_BITFIELD_OFFSET + 1)
+                end
+              end
+            else
+              for i in (1..getMaxVendorId())
+                allowedVendors.add(i) if isVendorAllowed(i)
+              end
+            end
+            allowedVendors
+          end
+
           def getAllowedPurposes
             allowedPurposes = getAllowedPurposeIds().map! {|id| IABConsentString::Purpose.new(id)}
             allowedPurposes.to_a.uniq{|o| [o.getId]}.to_set
