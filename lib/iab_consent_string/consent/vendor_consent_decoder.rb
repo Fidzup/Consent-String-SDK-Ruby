@@ -16,14 +16,15 @@ module IABConsentString
         if consentString.nil?
           raise "Null or empty consent string passed as an argument"
         end
-        fromByteArray(Base64.urlsafe_decode64(consentString).bytes.to_a)
+        byte_arr =  consentString.split('.').map { |chunk| Base64.urlsafe_decode64(chunk).bytes.to_a }.compact
+        fromByteArray(*byte_arr)
       end
 
-      def self.fromByteArray(bytes)
+      def self.fromByteArray(*bytes)
         if ( bytes.nil?  || bytes.length == 0)
           raise "Null or empty consent string passed as an argument"
         end
-        bits = Bits.new(bytes)
+        bits = Bits.new(bytes[0])
         version = getVersion(bits)
         case version
         when 1
