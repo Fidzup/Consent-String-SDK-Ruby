@@ -1,7 +1,7 @@
 require 'base64'
 require 'iab_consent_string/bits'
 require 'iab_consent_string/gdpr_constants'
-require 'iab_consent_string/consent/implementation/v1/byte_buffer_backed_vendor_consent'
+# require 'iab_consent_string/consent/implementation/v2/byte_buffer_backed_vendor_consent'
 
 module IABConsentString
   module Consent
@@ -25,10 +25,13 @@ module IABConsentString
           raise "Null or empty consent string passed as an argument"
         end
         bits = Bits.new(bytes[0])
+        bits_arr = bytes.map{ |b| Bits.new(b) }
         version = getVersion(bits)
         case version
         when 1
           IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(bits)
+        when 2
+          IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(*bits_arr)
         else
           raise "Unsupported version: " + version.to_s
         end
