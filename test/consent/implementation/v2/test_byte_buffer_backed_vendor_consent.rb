@@ -204,4 +204,101 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
    assert_equal(false,vendorConsent.isSpecialFeatureOptIn(12))
   end
 
+  def test_isSpecialFeatureOptIns
+    # Given: vendor list version of 150
+    binaryString = "000011" + # Version
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # vendor list version
+      "000010"                               + # policy version
+      "1"                                    + # is service specific
+      "1"                                    + # non iab standar stack
+      "011001100110"                         + # special feature
+      "011001100110011001100110"             + # purpose consented
+      "0000"
+
+   # When: object is constructed
+   vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+
+   # Then: correct vendor list version is returned
+   assert_equal(true,vendorConsent.isPurposesConsented(2))
+   assert_equal(true,vendorConsent.isPurposesConsented(3))
+   assert_equal(true,vendorConsent.isPurposesConsented(6))
+   assert_equal(true,vendorConsent.isPurposesConsented(7))
+   assert_equal(true,vendorConsent.isPurposesConsented(10))
+   assert_equal(true,vendorConsent.isPurposesConsented(11))
+   assert_equal(true,vendorConsent.isPurposesConsented(14))
+   assert_equal(true,vendorConsent.isPurposesConsented(15))
+   assert_equal(true,vendorConsent.isPurposesConsented(18))
+   assert_equal(true,vendorConsent.isPurposesConsented(19))
+   assert_equal(true,vendorConsent.isPurposesConsented(22))
+   assert_equal(true,vendorConsent.isPurposesConsented(23))
+
+   assert_equal(false,vendorConsent.isPurposesConsented(1))
+   assert_equal(false,vendorConsent.isPurposesConsented(4))
+   assert_equal(false,vendorConsent.isPurposesConsented(5))
+   assert_equal(false,vendorConsent.isPurposesConsented(8))
+   assert_equal(false,vendorConsent.isPurposesConsented(9))
+   assert_equal(false,vendorConsent.isPurposesConsented(12))
+   assert_equal(false,vendorConsent.isPurposesConsented(13))
+   assert_equal(false,vendorConsent.isPurposesConsented(16))
+   assert_equal(false,vendorConsent.isPurposesConsented(17))
+   assert_equal(false,vendorConsent.isPurposesConsented(20))
+   assert_equal(false,vendorConsent.isPurposesConsented(21))
+   assert_equal(false,vendorConsent.isPurposesConsented(24))
+  end
+
+  def test_isPurposesLITransparency
+    # Given: vendor list version of 150
+    binaryString = "000011" + # Version
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # vendor list version
+      "000010"                               + # policy version
+      "1"                                    + # is service specific
+      "1"                                    + # non iab standar stack
+      "011001100110"                         + # special feature
+      "011001100110011001100110"             + # purpose consented
+      "011001100110011001100110"             + # purpose li transparency
+      "0000"
+
+   # When: object is constructed
+   vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+
+   # Then: correct vendor list version is returned
+   assert_equal(true,vendorConsent.isPurposesLITransparency(2))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(3))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(6))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(7))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(10))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(11))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(14))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(15))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(18))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(19))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(22))
+   assert_equal(true,vendorConsent.isPurposesLITransparency(23))
+
+   assert_equal(false,vendorConsent.isPurposesLITransparency(1))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(4))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(5))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(8))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(9))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(12))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(13))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(16))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(17))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(20))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(21))
+   assert_equal(false,vendorConsent.isPurposesLITransparency(24))
+  end
+
 end

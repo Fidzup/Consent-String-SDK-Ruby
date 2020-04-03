@@ -64,10 +64,20 @@ module IABConsentString
             @bits_core.getBit(IABConsentString::GDPRConstantsV2::Core::SPECIAL_FEATURE_OPT_INS_OFFSET + id - 1);
           end
 
-          def getPurposesConsent
-            @bits_core.getInt(IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_OFFSET,IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_SIZE)
+          def isPurposesConsented(purpose_id)
+            if ((purpose_id < 1) || (purpose_id > IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_SIZE))
+              return false
+            end
+            @bits_core.getBit(IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_OFFSET + purpose_id - 1);
           end
-          
+
+          def isPurposesLITransparency(purpose_id)
+            if ((purpose_id < 1) || (purpose_id > IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE))
+              return false
+            end
+            @bits_core.getBit(IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_OFFSET + purpose_id - 1);
+          end
+
           def getPurposesLiTransparency
             @bits_core.getInt(IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_OFFSET,IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE)
           end
