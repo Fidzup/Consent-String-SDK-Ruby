@@ -169,7 +169,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
    assert_equal(true,vendorConsent.getIsServiceSpecific())
   end
 
-  def test_isSpecialFeatureOptIns
+  def test_isPurposesConsented
     # Given: vendor list version of 150
     binaryString = "000011" + # Version
       "001110001110110011010000101000000000" + # Created
@@ -182,7 +182,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
       "000010"                               + # policy version
       "1"                                    + # is service specific
       "1"                                    + # non iab standar stack
-      "011001100110"                         + # non iab standar stack
+      "011001100110"                         + # special feature
       "0000"
 
    # When: object is constructed

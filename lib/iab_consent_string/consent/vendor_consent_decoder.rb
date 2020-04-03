@@ -21,7 +21,7 @@ module IABConsentString
       end
 
       def self.fromByteArray(*bytes)
-        if ( bytes.nil?  || bytes.length == 0)
+        if ( bytes.nil?  || bytes.compact.length == 0)
           raise "Null or empty consent string passed as an argument"
         end
         bits = Bits.new(bytes[0])

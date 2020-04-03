@@ -141,7 +141,7 @@ module IABConsentString
             numEntries = @bits.getInt(IABConsentString::GDPRConstants::NUM_ENTRIES_OFFSET, IABConsentString::GDPRConstants::NUM_ENTRIES_SIZE)
             maxVendorId = getMaxVendorId()
             currentOffset = IABConsentString::GDPRConstants::RANGE_ENTRY_OFFSET
-            for i in (0...numEntries) do
+            numEntries.times do
               range = @bits.getBit(currentOffset)
               currentOffset += 1
               if range

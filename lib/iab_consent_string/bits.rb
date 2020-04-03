@@ -165,7 +165,7 @@ module IABConsentString
         charCode = values[i].ord - 65
         setInt(startInclusive + (i * 6), 6, charCode)
       end
-   end 
+    end 
 
     # @return [String] a string representation of the byte array passed in the constructor. for example, a bit array of [4]
     #   yields a String of "0100"
