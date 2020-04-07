@@ -11,6 +11,8 @@ module IABConsentString
         class ByteBufferBackedVendorConsent < IABConsentString::Consent::VendorConsent
           def initialize(*bits)
             @bits_core = bits[0]
+            @end_vendor_consent = nil
+            @end_vendor_legitimate_interest = nil
           end
 
           def getVersion
@@ -88,6 +90,21 @@ module IABConsentString
 
           def getPublisherCC
             @bits_core.getSixBitString(IABConsentString::GDPRConstantsV2::Core::PUBLISHER_CC_OFFSET,IABConsentString::GDPRConstantsV2::Core::PUBLISHER_CC_SIZE)
+          end
+
+          def getVendorConsent
+            parser = IABConsentString::Consent::Implementation::V2::VendorSectionParser.new(@bits_core, IABConsentString::GDPRConstantsV2::Core::VENDOR_START_SECTION_OFFSET)
+            vendor_consent = parser.parse
+            @end_vendor_consent = parser.current_offset
+            vendor_consent
+          end
+
+          def getVendorLegitimateInterest
+            getVendorConsent unless @end_vendor_consent
+            parser = IABConsentString::Consent::Implementation::V2::VendorSectionParser.new(@bits_core, @end_vendor_consent)
+            vendor_consent = parser.parse
+            @end_vendor_legitimate_interest = parser.current_offset
+            vendor_consent
           end
           
         end
