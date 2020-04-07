@@ -301,4 +301,57 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
    assert_equal(false,vendorConsent.isPurposesLITransparency(24))
   end
 
+  def test_getPurposeOneTreatment
+    # Given: vendor list version of 150
+    binaryString = "000011" + # Version
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # vendor list version
+      "000010"                               + # policy version
+      "1"                                    + # is service specific
+      "1"                                    + # non iab standar stack
+      "011001100110"                         + # special feature
+      "011001100110011001100110"             + # purpose consented
+      "011001100110011001100110"             + # purpose li transparency
+      "1"                                    + # purpose one treatement
+      "0000"
+
+   # When: object is constructed
+   vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+
+   # Then: correct vendor list version is returned
+   assert_equal(true,vendorConsent.getPurposeOneTreatment)
+  end
+
+  def test_getPublisherCC
+    # Given: vendor list version of 150
+    binaryString = "000011" + # Version
+      "001110001110110011010000101000000000" + # Created
+      "001110001110110011010000101000000000" + # Updated
+      "000000001111"                         + # CMP ID
+      "000000000101"                         + # CMP version
+      "010010"                               + # Content screen ID
+      "000100001101"                         + # Language code
+      "000010010110"                         + # vendor list version
+      "000010"                               + # policy version
+      "1"                                    + # is service specific
+      "1"                                    + # non iab standar stack
+      "011001100110"                         + # special feature
+      "011001100110011001100110"             + # purpose consented
+      "011001100110011001100110"             + # purpose li transparency
+      "1"                                    + # purpose one treatement
+      "000101010001"                         + # publisher CC
+      "0000"
+
+   # When: object is constructed
+   vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+
+   # Then: correct vendor list version is returned
+   assert_equal('FR',vendorConsent.getPublisherCC)
+  end
+
 end

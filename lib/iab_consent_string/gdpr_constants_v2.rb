@@ -29,6 +29,12 @@ module IABConsentString
       PURPOSES_CONSENT_SIZE = 24
       PURPOSES_LI_TRANSPARENCY_OFFSET = 176
       PURPOSES_LI_TRANSPARENCY_SIZE = 24
+      # Specific Jurisdiction Disclosures
+      PURPOSE_ONE_TREATMENT_OFFSET = 200
+      PURPOSE_ONE_TREATMENT_SIZE = 1
+      PUBLISHER_CC_OFFSET = 201
+      PUBLISHER_CC_SIZE = 12
+      MAX_VENDOR_ID_SIZE = 16
     end
   end
 end

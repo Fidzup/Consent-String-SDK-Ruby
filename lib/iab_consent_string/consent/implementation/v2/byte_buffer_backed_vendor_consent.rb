@@ -81,6 +81,15 @@ module IABConsentString
           def getPurposesLiTransparency
             @bits_core.getInt(IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_OFFSET,IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE)
           end
+
+          def getPurposeOneTreatment
+            @bits_core.getBit(IABConsentString::GDPRConstantsV2::Core::PURPOSE_ONE_TREATMENT_OFFSET);
+          end
+
+          def getPublisherCC
+            @bits_core.getSixBitString(IABConsentString::GDPRConstantsV2::Core::PUBLISHER_CC_OFFSET,IABConsentString::GDPRConstantsV2::Core::PUBLISHER_CC_SIZE)
+          end
+          
         end
       end
     end
