@@ -34,7 +34,12 @@ module IABConsentString
       PURPOSE_ONE_TREATMENT_SIZE = 1
       PUBLISHER_CC_OFFSET = 201
       PUBLISHER_CC_SIZE = 12
+      #Vendor section
       MAX_VENDOR_ID_SIZE = 16
+      VENDOR_IS_RANGE_ENCODING_OFFSET = 16
+      VENDOR_SECTION_OFFSET = 17
+      VENDOR_RANGE_NUM_ENTRY_SIZE = 12
+      VENDOR_ID_SIZE = 16
     end
   end
 end
