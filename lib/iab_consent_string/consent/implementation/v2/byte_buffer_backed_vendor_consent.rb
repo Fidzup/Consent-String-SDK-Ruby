@@ -106,6 +106,13 @@ module IABConsentString
             @end_vendor_legitimate_interest = parser.current_offset
             vendor_consent
           end
+
+          def getPublisherRestrictions
+            getVendorLegitimateInterest unless @end_vendor_legitimate_interest
+            parser = IABConsentString::Consent::Implementation::V2::PublisherRestrictionParser.new(@bits_core, @end_vendor_legitimate_interest)
+            publisher_restriction = parser.parse
+            publisher_restriction
+          end
           
         end
       end

@@ -35,11 +35,16 @@ module IABConsentString
       PUBLISHER_CC_OFFSET = 201
       PUBLISHER_CC_SIZE = 12
       #Vendor section
+      VENDOR_START_SECTION_OFFSET = 213
       MAX_VENDOR_ID_SIZE = 16
       VENDOR_IS_RANGE_ENCODING_OFFSET = 16
       VENDOR_SECTION_OFFSET = 17
       VENDOR_RANGE_NUM_ENTRY_SIZE = 12
       VENDOR_ID_SIZE = 16
+      #Publisher restriction
+      NUM_PUB_RESTRICTIONS_SIZE = 12
+      PURPOSE_ID_SIZE = 6
+      RESTRICTION_TYPE_SIZE = 2
     end
   end
 end
