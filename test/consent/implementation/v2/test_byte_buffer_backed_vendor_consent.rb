@@ -354,4 +354,75 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
    assert_equal('FR',vendorConsent.getPublisherCC)
   end
 
+  def test_disclosed_vendor
+    binarySegmentString = "" +
+      "001" + #Disclose Vendor
+      "000000000010" + # num entry
+      "1" + # is ranged
+      "0000000000000001" + # vendor id
+      "0000000000000100" + # end vendor id
+      "0" + # is ranged
+      "0000000000001001" # vendor id
+
+
+    core_string  = IABConsentString::Util::Utils.fromBinaryString("")
+    segment_string = IABConsentString::Util::Utils.fromBinaryString(binarySegmentString)
+    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(core_string, segment_string)
+
+    v = vendorConsent.getDisclosedVendor
+    assert_equal(true, v.isVendorConsented(1))
+    assert_equal(true, v.isVendorConsented(2))
+    assert_equal(true, v.isVendorConsented(4))
+    assert_equal(false, v.isVendorConsented(8))
+    assert_equal(true, v.isVendorConsented(9))
+  end
+
+
+  def test_allowed_vendor
+    binarySegmentString = "" +
+      "010" + #Allowed Vendor
+      "000000000010" + # num entry
+      "1" + # is ranged
+      "0000000000000001" + # vendor id
+      "0000000000000100" + # end vendor id
+      "0" + # is ranged
+      "0000000000001001" # vendor id
+
+
+    null_string  = IABConsentString::Util::Utils.fromBinaryString("")
+    segment_string = IABConsentString::Util::Utils.fromBinaryString(binarySegmentString)
+    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(null_string, null_string, segment_string)
+
+    v = vendorConsent.getAllowedVendor
+    assert_equal(true, v.isVendorConsented(1))
+    assert_equal(true, v.isVendorConsented(2))
+    assert_equal(true, v.isVendorConsented(4))
+    assert_equal(false, v.isVendorConsented(8))
+    assert_equal(true, v.isVendorConsented(9))
+  end
+
+
+  def test_publisher_purpose_transparancy
+    binarySegmentString = "" +
+    "011" + #PublisherTC
+    "001000000000000000000000" + # Pub Purpose Consent
+    "000100000000000000000000" + # PubPurposesLITransparency
+    "000010" + # num custom purpose
+    "01" + # vendor id
+    "10" # end vendor id
+
+    null_string  = IABConsentString::Util::Utils.fromBinaryString("")
+    segment_string = IABConsentString::Util::Utils.fromBinaryString(binarySegmentString)
+    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(null_string, null_string, segment_string)
+    vendorConsent.getPubPurposeConsent(3)
+    assert_equal(true, vendorConsent.getPubPurposeConsent(3))
+    assert_equal(false, vendorConsent.getPubPurposeConsent(4))
+    assert_equal(false, vendorConsent.getPubPurposeLITransparency(3))
+    assert_equal(true, vendorConsent.getCustomPurposeConsent(2))
+    assert_equal(false, vendorConsent.getCustomPurposeConsent(1))
+    assert_nil(vendorConsent.getCustomPurposeConsent(3))
+    assert_equal(true, vendorConsent.getCustomPurposeLITransparency(1))
+    assert_equal(false, vendorConsent.getCustomPurposeLITransparency(2))
+    assert_nil(vendorConsent.getCustomPurposeLITransparency(3))
+  end
 end
