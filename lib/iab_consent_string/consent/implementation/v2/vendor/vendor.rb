@@ -6,6 +6,7 @@ module IABConsentString
     module Implementation
       module V2
         class Vendor
+          attr_accessor :vendor_id, :is_a_ranged, :end_vendor_id
           def initialize(vendor_id, is_a_ranged = false, end_vendor_id = nil)
             @vendor_id = vendor_id
             @is_a_ranged = is_a_ranged
@@ -18,6 +19,10 @@ module IABConsentString
               return true if @vendor_id <= id && @end_vendor_id >= id
             end
             return false
+          end
+
+          def inspect
+            @is_a_ranged ? "[#{@vendor_id}:#{@end_vendor_id}]" : "[#{@vendor_id}]"
           end
         end
       end

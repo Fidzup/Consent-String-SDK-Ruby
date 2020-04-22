@@ -34,6 +34,64 @@ module IABConsentString
           def getSegmentType(bits)
             bits.getInt(IABConsentString::GDPRConstantsV2::Segment::SEGMENT_TYPE_OFFSET,IABConsentString::GDPRConstantsV2::Segment::SEGMENT_TYPE_SIZE)
           end
+
+          def inspect
+            core_str = <<~STR
+              #{super.inspect}
+              \tVersion: #{self.getVersion}
+              \tConsentRecordCreated:  #{self.getConsentRecordCreated}
+              \tConsentRecordLastUpdated:  #{self.getConsentRecordLastUpdated}
+              \tCmpId:  #{self.getCmpId}
+              \tCmpVersion:  #{self.getCmpVersion}
+              \tConsentScreen:  #{self.getConsentScreen}
+              \tConsentLanguage:  #{self.getConsentLanguage}
+              \tVendorListVersion:  #{self.getVendorListVersion}
+              \tTcfPolicyVersion:  #{self.getTcfPolicyVersion}
+              \tIsServiceSpecific:  #{self.getIsServiceSpecific}
+              \tUseNonNtandardStacks:  #{self.getUseNonNtandardStacks}
+              \tSpecialFeatureOptIn:
+              #{insepectListAttr("isSpecialFeatureOptIn", IABConsentString::GDPRConstantsV2::Core::SPECIAL_FEATURE_OPT_INS_SIZE)}
+              \tPurposesConsentedSpecialFeatureOptIn:
+              #{insepectListAttr("isPurposesConsented", IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_SIZE)}
+              \tPurposesLITransparency
+              #{insepectListAttr("isPurposesLITransparency", IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE)}
+              \tPurposeOneTreatment:  #{self.getPurposeOneTreatment}
+              \tPublisherCC:  #{self.getPublisherCC}
+              \tVendorConsent:  #{self.getVendorConsent.inspect}
+              \tVendorLegitimateInterest:  #{self.getVendorLegitimateInterest.inspect}
+              \tPublisherRestrictions:  #{self.getPublisherRestrictions.inspect}
+            STR
+
+            disclose_str = ""
+            if @bits_disclosed_vendors
+              disclose_str << "#Disclose Vendor Segment\n"
+              disclose_str << "\tDisclosedVendor:  #{self.getDisclosedVendor.inspect}\n"
+            end
+
+            allowed_str = ""
+            pp_str = ""
+
+            <<~STR
+              #{core_str}
+              #{disclose_str}
+              #{allowed_str}
+              #{pp_str}
+            STR
+          end
+
+          private
+          def insepectListAttr(method, max)
+            vals = (1..max).map{ |id| send(method, id) }
+            header= vals.each_with_index.map{ |v,i| sprintf("%2d", i) }.join("|")
+            separator = Array.new(vals.count, '--').join('+')
+            val_str = vals.map{ |v| (v ? " x" : "  " )}.join("|")
+            res = <<~STR
+              #{header}
+              #{separator}
+              #{val_str}
+            STR
+            res
+          end
         end
       end
     end

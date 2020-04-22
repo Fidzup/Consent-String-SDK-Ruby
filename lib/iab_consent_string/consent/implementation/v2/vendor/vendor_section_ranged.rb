@@ -22,6 +22,10 @@ module IABConsentString
             end
             self
           end
+
+          def inspect
+            @vendor.inspect
+          end
         end
       end
     end

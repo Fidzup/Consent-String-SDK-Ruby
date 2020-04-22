@@ -19,6 +19,10 @@ module IABConsentString
             @vendors = vendor
             @restriction = restriciton
           end
+
+          def inspect
+            {purpose_id: @purpose_id, vendor: @vendors, restriction: restriciton }
+          end
         end
       end
     end

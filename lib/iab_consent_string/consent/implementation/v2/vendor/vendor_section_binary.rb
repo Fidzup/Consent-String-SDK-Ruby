@@ -18,6 +18,10 @@ module IABConsentString
             @vendor[id] = Vendor.new(id)
             self
           end
+
+          def inspect
+            @vendor.inspect
+          end
         end
       end
     end

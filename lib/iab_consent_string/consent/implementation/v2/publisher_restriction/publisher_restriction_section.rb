@@ -39,6 +39,10 @@ module IABConsentString
             end
             return PurposeRestriction::UNDEFINED
           end
+
+          def inspect
+            @purposes.inspect
+          end
         end
       end
     end
