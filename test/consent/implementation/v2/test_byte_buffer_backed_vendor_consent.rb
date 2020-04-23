@@ -357,6 +357,8 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
   def test_disclosed_vendor
     binarySegmentString = "" +
       "001" + #Disclose Vendor
+      "0000000000000000" +
+      "1" +
       "000000000010" + # num entry
       "1" + # is ranged
       "0000000000000001" + # vendor id
@@ -381,6 +383,8 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
   def test_allowed_vendor
     binarySegmentString = "" +
       "010" + #Allowed Vendor
+      "0000000000000000" +
+      "1" +
       "000000000010" + # num entry
       "1" + # is ranged
       "0000000000000001" + # vendor id

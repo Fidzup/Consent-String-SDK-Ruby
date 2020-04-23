@@ -11,7 +11,7 @@ module IABConsentString
         module ByteBufferBackedDiscloedVendorConsent
           def getDisclosedVendor
             parser = IABConsentString::Consent::Implementation::V2::VendorSectionParser.new(@bits_disclosed_vendors, IABConsentString::GDPRConstantsV2::Segment::VENDOR_START_SECTION_OFFSET)
-            vendor_consent = parser.parse_range_vendor
+            vendor_consent = parser.parse
             vendor_consent
           end 
         end

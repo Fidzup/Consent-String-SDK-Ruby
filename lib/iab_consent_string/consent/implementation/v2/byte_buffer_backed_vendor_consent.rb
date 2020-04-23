@@ -64,12 +64,30 @@ module IABConsentString
 
             disclose_str = ""
             if @bits_disclosed_vendors
-              disclose_str << "#Disclose Vendor Segment\n"
+              disclose_str << "#Disclose Vendor Segment\n\n"
               disclose_str << "\tDisclosedVendor:  #{self.getDisclosedVendor.inspect}\n"
             end
 
             allowed_str = ""
+            if @bits_allowed_vendors
+              allowed_str << "#Allowed Vendor Segment\n\n"
+              allowed_str << "\tAllowedVendor:  #{self.getAllowedVendor.inspect}\n"
+            end
+
             pp_str = ""
+            if @bits_publisher_purpose
+              pp_str << "#PublisherTC Segment\n\n"
+              pp_str << "\tPubPurposeConsent:\n"
+              pp_str << "#{insepectListAttr("getPubPurposeConsent", 24)}"
+              pp_str << "\tPubPurposeLITransparency:\n"
+              pp_str << "#{insepectListAttr("getPubPurposeLITransparency", 24)}"
+              pp_str << "\tCustomPurposeConsent:\n"
+              pp_str << "\tNum: #{self.getNumCustomPurposes}\n"
+              pp_str << "\tCustomPurposeConsent:\n"
+              pp_str << "#{insepectListAttr("getCustomPurposeConsent", self.getNumCustomPurposes)}"
+              pp_str << "\tCustomPurposeLITransparency:\n"
+              pp_str << "#{insepectListAttr("getCustomPurposeLITransparency", self.getNumCustomPurposes)}"
+            end
 
             <<~STR
               #{core_str}
@@ -82,7 +100,7 @@ module IABConsentString
           private
           def insepectListAttr(method, max)
             vals = (1..max).map{ |id| send(method, id) }
-            header= vals.each_with_index.map{ |v,i| sprintf("%2d", i) }.join("|")
+            header= vals.each_with_index.map{ |v,i| sprintf("%2d", i+1) }.join("|")
             separator = Array.new(vals.count, '--').join('+')
             val_str = vals.map{ |v| (v ? " x" : "  " )}.join("|")
             res = <<~STR

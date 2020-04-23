@@ -20,7 +20,7 @@ module IABConsentString
           end
 
           def inspect
-            @vendor.inspect
+            @vendor.to_a.select{ |e| e[1] }.map{|e| e[0]}.inspect
           end
         end
       end

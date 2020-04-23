@@ -14,14 +14,14 @@ module IABConsentString
           UNDEFINED          = 3
 
           attr_accessor :vendors, :purpose_id, :restriction
-          def initialize(purpose_id, restriciton=UNDEFINED, vendor)
+          def initialize(purpose_id, restriciton, vendor)
             @purpose_id = purpose_id
             @vendors = vendor
-            @restriction = restriciton
+            @restriction = restriciton || UNDEFINED
           end
 
           def inspect
-            {purpose_id: @purpose_id, vendor: @vendors, restriction: restriciton }
+            {purpose_id: @purpose_id, vendor: @vendors, restriction: @restriction }
           end
         end
       end
