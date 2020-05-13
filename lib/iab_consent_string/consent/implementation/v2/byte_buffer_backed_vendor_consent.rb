@@ -48,7 +48,7 @@ module IABConsentString
               \tVendorListVersion:  #{self.getVendorListVersion}
               \tTcfPolicyVersion:  #{self.getTcfPolicyVersion}
               \tIsServiceSpecific:  #{self.getIsServiceSpecific}
-              \tUseNonNtandardStacks:  #{self.getUseNonNtandardStacks}
+              \tUseNonNtandardStacks:  #{self.getUseNonStandardStacks}
               \tSpecialFeatureOptIn:
               #{insepectListAttr("isSpecialFeatureOptIn", IABConsentString::GDPRConstantsV2::Core::SPECIAL_FEATURE_OPT_INS_SIZE)}
               \tPurposesConsentedSpecialFeatureOptIn:

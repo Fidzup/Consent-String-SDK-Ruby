@@ -49,7 +49,7 @@ module IABConsentString
             @bits_core.getBit(IABConsentString::GDPRConstantsV2::Core::IS_SERVICE_SPECIFIC_OFFSET)
           end
 
-          def getUseNonNtandardStacks
+          def getUseNonStandardStacks
             @bits_core.getBit(IABConsentString::GDPRConstantsV2::Core::USE_NON_STANDARD_STACKS_OFFSET)
           end
 
