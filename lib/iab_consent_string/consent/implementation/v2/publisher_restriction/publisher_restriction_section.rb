@@ -43,6 +43,20 @@ module IABConsentString
           def inspect
             @purposes.inspect
           end
+
+          def pub_restriction_size
+            @purposes.keys.size
+          end
+
+          def to_bit_string
+            str = sprintf("%0#{IABConsentString::GDPRConstantsV2::Core::NUM_PUB_RESTRICTIONS_SIZE}b", pub_restriction_size)
+            @purposes.each do |k, pr|
+              str += sprintf("%0#{IABConsentString::GDPRConstantsV2::Core::PURPOSE_ID_SIZE}b", k.to_i)
+              str += sprintf("%0#{IABConsentString::GDPRConstantsV2::Core::RESTRICTION_TYPE_SIZE}b", pr.restriction)
+              str += pr.vendors.to_bit_string_no_vendor_size
+            end
+            str
+          end
         end
       end
     end

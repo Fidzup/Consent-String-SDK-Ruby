@@ -34,5 +34,6 @@ class PublisherRestrictionParserV2Test < Minitest::Test
     assert_equal(2, pr.getRestriction(4,13))
     assert_equal(3, pr.getRestriction(4,14))
     assert_equal(158, parser.current_offset)
+    assert_equal(binaryString[6..], pr.to_bit_string)
   end
 end

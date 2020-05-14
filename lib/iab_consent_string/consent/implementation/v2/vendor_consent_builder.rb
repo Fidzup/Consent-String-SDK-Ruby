@@ -145,6 +145,11 @@ module IABConsentString
             self
           end
 
+          def build
+            bitBufferSizeInBits = IABConsentString::GDPRConstantsV2::Core::VENDOR_START_SECTION_OFFSET
+          end
+          
+
         end
       end
     end
