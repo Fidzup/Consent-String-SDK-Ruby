@@ -23,7 +23,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
       "0000"
 
     # When: object is constructed
-    vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
     # Then: correct created timestamp is returned
     assert_equal(DateTime.new(2018,6,4,0,0,0).to_time.to_i * 1000, vendorConsent.getConsentRecordCreated())
@@ -37,7 +37,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
       "0000"
 
     # When: object is constructed
-    vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
     # Then: correct updated timestamp is returned
     assert_equal(DateTime.new(2018,6,4,0,0,0).to_time.to_i * 1000, vendorConsent.getConsentRecordLastUpdated())
@@ -52,7 +52,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
       "0000"
 
     # When: object is constructed
-    vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
     # Then: correct cmp ID is returned
     assert_equal(15,vendorConsent.getCmpId())
@@ -68,7 +68,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
       "0000"
 
     # When: object is constructed
-    vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
     # Then: correct cmp version is returned
     assert_equal(5,vendorConsent.getCmpVersion());
@@ -85,7 +85,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
       "0000"
 
     # When: object is constructed
-    vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
     # Then: correct content screen ID is returned
     assert_equal(18,vendorConsent.getConsentScreen());
@@ -103,7 +103,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
       "0000"
 
     # When: object is constructed
-    vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
     # Then: correct language code is returned
     assert_equal("EN",vendorConsent.getConsentLanguage())
@@ -122,7 +122,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
       "0000"
 
    # When: object is constructed
-   vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
+   vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
    # Then: correct vendor list version is returned
    assert_equal(150,vendorConsent.getVendorListVersion())

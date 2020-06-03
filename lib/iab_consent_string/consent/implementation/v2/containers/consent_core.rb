@@ -11,18 +11,22 @@ module IABConsentString
             attr_accessor :consent_record_created, :consent_record_last_updated,
               :cmp_id, :cmp_version, :consent_screen, :consent_language, :vendor_list_version,
               :tcf_policy_version, :is_service_specific, :use_non_standard_stacks, :purposes_li_transparency, :purpose_one_treatment,
-              :publisher_cc, :vendor_consent, :vendor_legitimate_interest, :publisher_restrictions
+              :publisher_cc, :vendor_consent, :vendor_legitimate_interest, :publisher_restrictions, :special_feature_opt_in,
+              :purposes_consented
+
 
             def initialize
               @version = 2
-              @consent_record_created = Time.now
-              @consent_record_last_updated = Time.now
+              @consent_record_created = (DateTime.now.to_time.to_f * 1000).to_i
+              @consent_record_last_updated = (DateTime.now.to_time.to_f * 1000).to_i
               @cmp_id = 0
               @cmp_version = 0
               @consent_screen = 0
               @consent_language = 'en'
               @vendor_list_version = 0
+              @purpose_one_treatment = false
               @tcf_policy_version = 0
+              @publisher_cc = 'en'
               @is_service_specific = false
               @use_non_standard_stacks = false
               @special_feature_opt_in = Array.new(IABConsentString::GDPRConstantsV2::Core::SPECIAL_FEATURE_OPT_INS_SIZE, false)
@@ -84,7 +88,7 @@ module IABConsentString
             # @return [VendorConsent] proper Vendor consent instance
             #
             def init_vendor_consent(ranged:)
-              @vendor_consent = VendorConsentBuilder.new.build(is_ranged_encoding: ranged)
+              @vendor_consent = VendorSectionBuilder.build(is_ranged_encoding: ranged)
               @vendor_consent
             end
             
@@ -96,7 +100,7 @@ module IABConsentString
             # @return [VendorConsent] proper Vendor legitimate interest instance
             #
             def init_vendor_legitimate_interest(ranged:)
-              @vendor_legitimate_interest = VendorConsentBuilder.new.build(is_ranged_encoding: ranged)
+              @vendor_legitimate_interest = VendorSectionBuilder.build(is_ranged_encoding: ranged)
               @vendor_legitimate_interest
             end
           end

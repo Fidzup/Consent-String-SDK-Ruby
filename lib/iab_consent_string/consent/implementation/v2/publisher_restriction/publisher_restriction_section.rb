@@ -48,14 +48,39 @@ module IABConsentString
             @purposes.keys.size
           end
 
-          def to_bit_string
-            str = sprintf("%0#{IABConsentString::GDPRConstantsV2::Core::NUM_PUB_RESTRICTIONS_SIZE}b", pub_restriction_size)
+          def string_bit_size
+            size = IABConsentString::GDPRConstantsV2::Core::NUM_PUB_RESTRICTIONS_SIZE
             @purposes.each do |k, pr|
-              str += sprintf("%0#{IABConsentString::GDPRConstantsV2::Core::PURPOSE_ID_SIZE}b", k.to_i)
-              str += sprintf("%0#{IABConsentString::GDPRConstantsV2::Core::RESTRICTION_TYPE_SIZE}b", pr.restriction)
-              str += pr.vendors.to_bit_string_no_vendor_size
+              size += IABConsentString::GDPRConstantsV2::Core::PURPOSE_ID_SIZE
+              size += IABConsentString::GDPRConstantsV2::Core::RESTRICTION_TYPE_SIZE
+              size += pr.vendors.range_vendor_bit_size
             end
-            str
+            size
+          end
+
+          def to_bit_string
+            b = Bits.new(Array.new(string_bit_size.fdiv(8).ceil, 0))
+            write_bits(b, 0)
+            b.getBinaryString
+          end
+
+          #
+          # write vendor section into Bits object
+          # @param [Bits] bits bits object to write into
+          # @param [Integer] start_offset position to start writing
+          # @return [Bits] modified bits
+          def write_bits(bits, start_offset)
+            cursor = start_offset
+            bits.setInt(cursor, IABConsentString::GDPRConstantsV2::Core::NUM_PUB_RESTRICTIONS_SIZE, pub_restriction_size)
+            cursor += IABConsentString::GDPRConstantsV2::Core::NUM_PUB_RESTRICTIONS_SIZE
+            @purposes.each do |k, pr|
+              bits.setInt(cursor, IABConsentString::GDPRConstantsV2::Core::PURPOSE_ID_SIZE, k.to_i)
+              cursor += IABConsentString::GDPRConstantsV2::Core::PURPOSE_ID_SIZE
+              bits.setInt(cursor, IABConsentString::GDPRConstantsV2::Core::RESTRICTION_TYPE_SIZE, pr.restriction)
+              cursor += IABConsentString::GDPRConstantsV2::Core::RESTRICTION_TYPE_SIZE
+              cursor = pr.vendors.write_bits_no_vendor_size(bits,cursor)
+            end
+            bits
           end
         end
       end

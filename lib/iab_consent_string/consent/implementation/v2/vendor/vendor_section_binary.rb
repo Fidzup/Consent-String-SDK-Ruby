@@ -25,7 +25,7 @@ module IABConsentString
           end
 
           def vendor_size
-            @vendor.keys.map(&:to_i).max
+            @vendor.keys.map(&:to_i).max || 0
           end
 
           def string_bit_size
@@ -35,12 +35,27 @@ module IABConsentString
           end
 
           def to_bit_string
-            str = sprintf("%0#{IABConsentString::GDPRConstantsV2::Core::MAX_VENDOR_ID_SIZE}b", vendor_size)
-            str += "0"
+            b = Bits.new(Array.new(string_bit_size.fdiv(8).ceil, 0))
+            write_bits(b, 0)
+            b.getBinaryString
+          end
+
+          #
+          # write vendor section into Bits object
+          # @param [Bits] bits bits object to write into
+          # @param [Integer] start_offset position to start writing
+          # @return [Bits] modified bits
+          def write_bits(bits, start_offset)
+            cursor = start_offset
+            bits.setInt(cursor, IABConsentString::GDPRConstantsV2::Core::MAX_VENDOR_ID_SIZE, vendor_size)
+            cursor += IABConsentString::GDPRConstantsV2::Core::MAX_VENDOR_ID_SIZE
+            bits.setBoolean(cursor, false)
+            cursor += 1
             for i in (1..vendor_size)
-              str << (isVendorConsented(i) ? "1" : "0")
+              bits.setBoolean(cursor, isVendorConsented(i))
+              cursor += 1
             end
-            str
+            bits
           end
         end
       end

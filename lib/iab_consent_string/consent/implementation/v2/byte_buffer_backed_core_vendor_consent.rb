@@ -30,7 +30,7 @@ module IABConsentString
           end
 
           def getConsentScreen
-            @bits_core.getInt(IABConsentString::GDPRConstantsV2::Core::CONSENT_SCREEN_SIZE_OFFSET,IABConsentString::GDPRConstantsV2::Core::CONSENT_SCREEN_SIZE)
+            @bits_core.getInt(IABConsentString::GDPRConstantsV2::Core::CONSENT_SCREEN_OFFSET,IABConsentString::GDPRConstantsV2::Core::CONSENT_SCREEN_SIZE)
           end
 
           def getConsentLanguage
@@ -93,6 +93,10 @@ module IABConsentString
             vendor_consent
           end
 
+          def isVendorConsented(id)
+            self.getVendorConsent.isVendorConsented(id)
+          end
+
           def getVendorLegitimateInterest
             getVendorConsent unless @end_vendor_consent
             parser = IABConsentString::Consent::Implementation::V2::VendorSectionParser.new(@bits_core, @end_vendor_consent)
@@ -101,11 +105,21 @@ module IABConsentString
             vendor_consent
           end
 
+          def isVendorLegitimateInterested(id)
+            self.getVendorLegitimateInterest.isVendorConsented(id)
+          end
+
+          # get publisher restriction
+          # @return [PublisherRestrictionSection] publisher restriction object
           def getPublisherRestrictions
             getVendorLegitimateInterest unless @end_vendor_legitimate_interest
             parser = IABConsentString::Consent::Implementation::V2::PublisherRestrictionParser.new(@bits_core, @end_vendor_legitimate_interest)
             publisher_restriction = parser.parse
             publisher_restriction
+          end
+
+          def getPublisherRestriction(purpose_id, vendor_id)
+            self.getPublisherRestrictions.getRestriction(purpose_id, vendor_id)
           end
           
         end

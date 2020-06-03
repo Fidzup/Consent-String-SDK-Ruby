@@ -37,6 +37,19 @@ module IABConsentString
       @bytes[byteIndex] &= ~(1 << shift)
     end
 
+    #
+    # Set on bit boolean value in position
+    #
+    # @param [Integer] index position
+    # @param [Boolean] val Value
+    def setBoolean(index, val)
+      if val
+        setBit(index)
+      else
+        unsetBit(index)
+      end
+    end
+
     # Interprets n number of bits as a big endiant int
     # @param startInclusive [Integer] the nth to begin interpreting from
     # @param size [Integer] the number of bits to interpret

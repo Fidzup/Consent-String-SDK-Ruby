@@ -19,6 +19,7 @@ module IABConsentString
           include ByteBufferBackedPublisherPurposesTransparency
           def initialize(*bits)
             @bits_core = bits[0]
+            @end_vendor_consent = nil
             bits[1..]&.each do |bit|
               case getSegmentType(bit)
               when 1
