@@ -37,6 +37,19 @@ module IABConsentString
       @bytes[byteIndex] &= ~(1 << shift)
     end
 
+    #
+    # Set on bit boolean value in position
+    #
+    # @param [Integer] index position
+    # @param [Boolean] val Value
+    def setBoolean(index, val)
+      if val
+        setBit(index)
+      else
+        unsetBit(index)
+      end
+    end
+
     # Interprets n number of bits as a big endiant int
     # @param startInclusive [Integer] the nth to begin interpreting from
     # @param size [Integer] the number of bits to interpret
@@ -165,7 +178,7 @@ module IABConsentString
         charCode = values[i].ord - 65
         setInt(startInclusive + (i * 6), 6, charCode)
       end
-   end 
+    end 
 
     # @return [String] a string representation of the byte array passed in the constructor. for example, a bit array of [4]
     #   yields a String of "0100"

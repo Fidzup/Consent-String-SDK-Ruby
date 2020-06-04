@@ -28,6 +28,7 @@ This library supports the version v1.1 of the specification. It can encode and d
     "lib/iab_consent_string/consent/range/start_end_range_entry.rb",
     "lib/iab_consent_string/consent/implementation/v1/byte_buffer_backed_vendor_consent.rb",
     "lib/iab_consent_string/consent/implementation/v1/vendor_consent_builder.rb",
+    "lib/iab_consent_string/consent/implementation/v2/vendor_consent_builder.rb",
   ]
   s.homepage    = 'https://rubygems.org/gems/iab_consent_string'
   s.metadata    = { "source_code_uri" => "https://github.com/Fidzup/Consent-String-SDK-Ruby" }

@@ -1,7 +1,7 @@
 require 'base64'
 require 'iab_consent_string/bits'
 require 'iab_consent_string/gdpr_constants'
-require 'iab_consent_string/consent/implementation/v1/byte_buffer_backed_vendor_consent'
+# require 'iab_consent_string/consent/implementation/v2/byte_buffer_backed_vendor_consent'
 
 module IABConsentString
   module Consent
@@ -10,24 +10,27 @@ module IABConsentString
     class VendorConsentDecoder
       # Build a IABConsentString::Consent::VendorConsent object from a base64 string
       # @params consentString [String] a url safe base64 encoded consent string
-      # @return [IABConsentString::Consent::VendorConsent] a VendorConsent object
       # @raise an error when there's a problem with the consentString passed
       def self.fromBase64String(consentString)
         if consentString.nil?
           raise "Null or empty consent string passed as an argument"
         end
-        fromByteArray(Base64.urlsafe_decode64(consentString).bytes.to_a)
+        byte_arr =  consentString.split('.').map { |chunk| Base64.urlsafe_decode64(chunk).bytes.to_a }.compact
+        fromByteArray(*byte_arr)
       end
 
-      def self.fromByteArray(bytes)
-        if ( bytes.nil?  || bytes.length == 0)
+      def self.fromByteArray(*bytes)
+        if ( bytes.nil?  || bytes.compact.length == 0)
           raise "Null or empty consent string passed as an argument"
         end
-        bits = Bits.new(bytes)
+        bits = Bits.new(bytes[0])
+        bits_arr = bytes.map{ |b| Bits.new(b) }
         version = getVersion(bits)
         case version
         when 1
           IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(bits)
+        when 2
+          IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(*bits_arr)
         else
           raise "Unsupported version: " + version.to_s
         end
