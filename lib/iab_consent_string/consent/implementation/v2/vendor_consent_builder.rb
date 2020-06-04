@@ -148,24 +148,41 @@ module IABConsentString
           #
           # @param [Integer] id Purpose id
           # @param [Boolean] val true :  legitimate interest established. false : legitimate interest was NOT established or it was established but user exercised their “Right to Object” to the Purpose 
-          #
-          # @return [<Type>] <description>
+          # @return [VendorConsentBuilder] self
           #
           def withPurposesLITransparency(id, val)
             @consent_core.set_purposes_li_transparency(id, val)
             self
           end
 
+          #
+          # Add a Vendor consent section as a bit field
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def withBinaryVendorConsent()
             @consent_core.init_vendor_consent(ranged: false)
             self
           end
 
+          #
+          # Add a Vendor consent section as a range
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def withRangedVendorConsent()
             @consent_core.init_vendor_consent(ranged: true)
             self
           end
-
+  
+          #
+          # Add a vendor in vendor section segment
+          #
+          # @param [Integer] vendor_id Vendor Id to add
+          # @param [Integer] end_vendor_id end of range vendor id if any
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def addVendorConsent(vendor_id, end_vendor_id = nil)
             raise "Consent is binary set and cannot accept range" if end_vendor_id && @consent_core.vendor_consent.is_a?(VendorSectionBinary)
             if end_vendor_id
@@ -176,16 +193,34 @@ module IABConsentString
             self
           end
 
+          #
+          # Add Vendor legitimate interest as a bit field
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def withBinaryVendorLegitimateInterest()
             @consent_core.init_vendor_legitimate_interest(ranged: false)
             self
           end
 
+          #
+          # Add Vendor legitimate interest as a range
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def withRangedVendorLegitimateInterest()
             @consent_core.init_vendor_legitimate_interest(ranged: true)
             self
           end
 
+          #
+          # Add a vendor as a legitimate interest
+          #
+          # @param [Integer] vendor_id Vendor Id to add
+          # @param [Integer] end_vendor_id end of range vendor id if any
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def addVendorLegitimateInterest(vendor_id, end_vendor_id = nil)
             raise "Consent is binary set and cannot accept range" if end_vendor_id && @consent_core.vendor_legitimate_interest.is_a?(VendorSectionBinary)
             if end_vendor_id
@@ -196,30 +231,101 @@ module IABConsentString
             self
           end
 
+          #
+          # Add a publisher restriction per vendor
+          #
+          # @param [IABConsentString::Consent::Implementation::V2::VendorSectionRanged] vendor Vendor container
+          # @param [Integer] purpose_id Purpose ID
+          # @param [Integer] restriction Restriction Values
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def withPublisherRestriction(vendor, purpose_id, restriction)
             @consent_core.publisher_restrictions.addRestriction(purpose_id, restriction, vendor)
+            self
           end
 
+          #
+          # Add Disclose Vendor segment as a binary field
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def withBinaryDisclosedVendor
             @disclosed_vendor = VendorSectionBuilder.build(is_ranged_encoding: false)
             self
           end
 
+          #
+          # Add Disclose Vendor segment as a range
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def withRangedDisclosedVendor
             @disclosed_vendor = VendorSectionBuilder.build(is_ranged_encoding: true)
             self
           end
 
+          #
+          # Add a disclosed vendor
+          #
+          # @param [Integer] vendor_id Vendor Id to add
+          # @param [Integer] end_vendor_id end of range vendor id if any
+          #
+          # @return [VendorConsentBuilder] self
+          #
+          def addDisclosedVendor(vendor_id, end_vendor_id = nil)
+            raise "Consent is binary set and cannot accept range" if end_vendor_id && @disclosed_vendor.is_a?(VendorSectionBinary)
+            if end_vendor_id
+              @disclosed_vendor.addVendor(vendor_id, end_vendor_id)
+            else
+              @disclosed_vendor.addVendor(vendor_id)
+            end
+            self
+          end
+
+          #
+          # Add Allowed Vendor segment as a binary field
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def withBinaryAllowedVendor
             @allowed_vendor = VendorSectionBuilder.build(is_ranged_encoding: false)
             self
           end
 
+          #
+          # Add Allowed Vendor segment as a binary field
+          #
+          # @return [VendorConsentBuilder] self
+          #
           def withRangedAllowedVendor
             @allowed_vendor = VendorSectionBuilder.build(is_ranged_encoding: true)
             self
           end
 
+          #
+          # Add an allowed vendor to the allo vendor segment
+          #
+          # @param [Integer] vendor_id Vendor Id to add
+          # @param [Integer] end_vendor_id end of range vendor id if any
+          #
+          # @return [VendorConsentBuilder] self
+          #
+          def addAllowedVendor(vendor_id, end_vendor_id = nil)
+            raise "Consent is binary set and cannot accept range" if end_vendor_id && @allowed_vendor.is_a?(VendorSectionBinary)
+            if end_vendor_id
+              @allowed_vendor.addVendor(vendor_id, end_vendor_id)
+            else
+              @allowed_vendor.addVendor(vendor_id)
+            end
+            self
+          end
+
+          #
+          # build a byte buffer
+          #
+          # @return [IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent] byte buffer object
+          #
           def build
             coreBitBufferSizeInBits = IABConsentString::GDPRConstantsV2::Core::VENDOR_START_SECTION_OFFSET
             coreBitBufferSizeInBits += @consent_core.vendor_consent.string_bit_size
@@ -261,7 +367,7 @@ module IABConsentString
               bits_disclosed = IABConsentString::Bits.new(Array.new(disclosedVendorBitBufferSizeInBits.fdiv(8).ceil, 0b0))
               bits_disclosed.setInt(IABConsentString::GDPRConstantsV2::Segment::SEGMENT_TYPE_OFFSET, IABConsentString::GDPRConstantsV2::Segment::SEGMENT_TYPE_SIZE, 1)
               @disclosed_vendor.write_bits(bits_disclosed, IABConsentString::GDPRConstantsV2::Segment::VENDOR_START_SECTION_OFFSET)
-              bits << @disclosed_vendor
+              bits << bits_disclosed
             end
 
             if @allowed_vendor
@@ -269,7 +375,7 @@ module IABConsentString
               bits_allowed = IABConsentString::Bits.new(Array.new(allowedVendorBitBufferSizeInBits.fdiv(8).ceil, 0b0))
               bits_allowed.setInt(IABConsentString::GDPRConstantsV2::Segment::SEGMENT_TYPE_OFFSET, IABConsentString::GDPRConstantsV2::Segment::SEGMENT_TYPE_SIZE, 2)
               @allowed_vendor.write_bits(bits_allowed, IABConsentString::GDPRConstantsV2::Segment::VENDOR_START_SECTION_OFFSET)
-              bits << @allowed_vendor
+              bits << bits_allowed
             end
 
             IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(*bits)

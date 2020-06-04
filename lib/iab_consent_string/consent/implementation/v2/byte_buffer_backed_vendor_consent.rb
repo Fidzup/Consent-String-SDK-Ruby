@@ -20,6 +20,10 @@ module IABConsentString
           def initialize(*bits)
             @bits_core = bits[0]
             @end_vendor_consent = nil
+            @bits_disclosed_vendors  = nil
+            @bits_allowed_vendors  = nil
+            @bits_publisher_purpose  = nil
+            @end_vendor_legitimate_interest = nil
             bits[1..]&.each do |bit|
               case getSegmentType(bit)
               when 1
@@ -30,6 +34,14 @@ module IABConsentString
                 @bits_publisher_purpose  = bit
               end
             end 
+          end
+
+          def toByteArrayList
+            l = [@bits_core.toByteArray]
+            l << @bits_disclosed_vendors.toByteArray if @bits_disclosed_vendors
+            l << @bits_allowed_vendors.toByteArray if @bits_allowed_vendors
+            l << @bits_publisher_purpose.toByteArray if @bits_publisher_purpose
+            l
           end
 
           def getSegmentType(bits)

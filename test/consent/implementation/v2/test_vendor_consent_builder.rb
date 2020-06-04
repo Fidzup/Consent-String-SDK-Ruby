@@ -160,4 +160,47 @@ class VendorConsentV2BuilderTest < Minitest::Test
     assert_equal(restriction,consent.getPublisherRestriction(purpose_id, vendor_id))
   end
 
+  def test_withBinaryDisclosedVendor
+    @consent_builder.withBinaryDisclosedVendor
+    ids = (1..24).to_a.sample(4)
+    ids.each do |id|
+      @consent_builder.addDisclosedVendor(id)
+    end
+    consent = @consent_builder.build
+    ids.each do |id|
+      assert_equal(true,consent.isDisclosedVendor(id))
+    end
+  end
+
+  def test_withRangedDisclosedVendor
+    @consent_builder.withRangedDisclosedVendor
+    @consent_builder.addDisclosedVendor(3)
+    @consent_builder.addDisclosedVendor(5,9)
+    consent = @consent_builder.build
+    assert_equal(true,consent.isDisclosedVendor(3))
+    assert_equal(true,consent.isDisclosedVendor(6))
+  end
+
+  def test_withBinaryAllowedVendor
+    @consent_builder.withBinaryAllowedVendor
+    ids = (1..24).to_a.sample(4)
+    ids.each do |id|
+      @consent_builder.addAllowedVendor(id)
+    end
+    consent = @consent_builder.build
+    ids.each do |id|
+      assert_equal(true,consent.isAllowedVendor(id))
+    end
+  end
+
+  def test_withRangedAllowedVendor
+    @consent_builder.withRangedAllowedVendor
+    @consent_builder.addAllowedVendor(3)
+    @consent_builder.addAllowedVendor(5,9)
+    consent = @consent_builder.build
+    assert_equal(true,consent.isAllowedVendor(3))
+    assert_equal(true,consent.isAllowedVendor(6))
+  end
+
+
 end

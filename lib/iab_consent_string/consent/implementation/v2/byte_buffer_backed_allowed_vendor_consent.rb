@@ -14,6 +14,10 @@ module IABConsentString
             vendor_consent = parser.parse
             vendor_consent
           end 
+
+          def isAllowedVendor(id)
+            self.getAllowedVendor.isVendorConsented(id)
+          end
         end
       end
     end

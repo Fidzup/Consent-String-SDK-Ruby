@@ -10,7 +10,6 @@ module IABConsentString
     class VendorConsentDecoder
       # Build a IABConsentString::Consent::VendorConsent object from a base64 string
       # @params consentString [String] a url safe base64 encoded consent string
-      # @return [IABConsentString::Consent::VendorConsent] a VendorConsent object
       # @raise an error when there's a problem with the consentString passed
       def self.fromBase64String(consentString)
         if consentString.nil?

@@ -108,6 +108,10 @@ module IABConsentString
             end
           end
 
+          def toByteArrayList
+            [self.toByteArray]
+          end
+
           def toByteArray
             @bits.toByteArray()
           end
