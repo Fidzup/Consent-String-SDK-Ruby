@@ -31,4 +31,17 @@ class VendorConsentEncoderTest < Minitest::Test
     allowedPurposesBits = vendorConsent.getAllowedPurposesBits()
     assert !allowedPurposesBits.nil?
   end
+
+  def test_EncodeV2
+    @consent_builder = IABConsentString::Consent::Implementation::V2::VendorConsentBuilder.new()
+    @consent_builder.withBinaryVendorConsent().withBinaryVendorLegitimateInterest()
+    @consent_builder.withBinaryDisclosedVendor
+    @consent_builder.withBinaryAllowedVendor
+    @consent_builder.withCmpId(2)
+    @consent_builder.withConsentRecordCreatedOn((DateTime.new(2020,6,1,1,1,1).to_time.to_f * 1000).to_i)
+    @consent_builder.withConsentRecordLastUpdatedOn((DateTime.new(2020,6,1,1,1,1).to_time.to_f * 1000).to_i)
+    consent = @consent_builder.build
+    base64String = IABConsentString::Consent::VendorConsentEncoder.toBase64String(consent)
+    assert_equal("CO0S0ECO0S0ECACAAAktAAAAAAAAAAAAAEloAAAAAAAA.IAAA.QAAA",base64String)
+  end
 end

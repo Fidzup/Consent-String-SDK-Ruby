@@ -86,6 +86,10 @@ module IABConsentString
       def toByteArray
         raise NotImplementedError
       end
+
+      def inspect
+        super.inspect
+      end
     end
   end
 end

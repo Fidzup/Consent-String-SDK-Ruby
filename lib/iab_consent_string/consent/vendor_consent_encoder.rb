@@ -7,8 +7,9 @@ module IABConsentString
       # @param vendorConsent [VendorConsent] vendor consent
       # @return [String] Base64 encoded string
       def self.toBase64String(vendorConsent)
-        # Encode Without Padding to respect IAB Consent String Spec
-        Base64.urlsafe_encode64(vendorConsent.toByteArray().pack("C*") , padding: false)
+        vendorConsent.toByteArrayList.map do |arr|
+          Base64.urlsafe_encode64(arr.pack("C*") , padding: false)
+        end.join(".")
       end
     end
   end
