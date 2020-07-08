@@ -26,7 +26,7 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
     # Then: correct created timestamp is returned
-    assert_equal(DateTime.new(2018,6,4,0,0,0).to_time.to_i * 1000, vendorConsent.getConsentRecordCreated())
+    assert_equal(DateTime.new(2018,6,4,0,0,0).strftime('%Q').to_i, vendorConsent.getConsentRecordCreated())
   end
 
   def test_getConsentRecordLastUpdated
@@ -40,7 +40,7 @@ class ByteBufferBackedVendorConsentTest < Minitest::Test
     vendorConsent = IABConsentString::Consent::Implementation::V1::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
     # Then: correct updated timestamp is returned
-    assert_equal(DateTime.new(2018,6,4,0,0,0).to_time.to_i * 1000, vendorConsent.getConsentRecordLastUpdated())
+    assert_equal(DateTime.new(2018,6,4,0,0,0).strftime('%Q').to_i, vendorConsent.getConsentRecordLastUpdated())
   end
 
   def test_getCmpId
