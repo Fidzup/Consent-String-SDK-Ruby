@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'iab_consent_string'
-  s.version     = '1.0.0'
+  s.version     = '1.1.0'
   s.licenses    = ['MIT']
   s.summary     = "Encode and decode web-safe base64 consent information with the IAB EU's GDPR Transparency and Consent Framework."
   s.description = "This library is a Ruby reference implementation for dealing with consent strings in the IAB EU's GDPR Transparency and Consent Framework.
