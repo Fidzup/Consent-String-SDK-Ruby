@@ -67,6 +67,10 @@ module IABConsentString
             @bits_core.getBit(IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_OFFSET + purpose_id - 1);
           end
 
+          def getAllowedPurposeIds
+            return (1..IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_SIZE).select { |i| self.isPurposesConsented(i) }
+          end
+
           def isPurposesLITransparency(purpose_id)
             if ((purpose_id < 1) || (purpose_id > IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE))
               return false
@@ -95,6 +99,15 @@ module IABConsentString
 
           def isVendorConsented(id)
             self.getVendorConsent.isVendorConsented(id)
+          end
+
+          def getMaxVendorId()
+            self.getVendorConsent.vendor_size
+          end
+
+          #WARNING Refer to consented vendor
+          def getAllowedVendorIds()
+            (1..self.getMaxVendorId()).select { |i| self.isVendorConsented(i) }
           end
 
           def getVendorLegitimateInterest
