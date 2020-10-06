@@ -117,8 +117,21 @@ module IABConsentString
           # @param [Integer ] id Special Feature id
           # @param [Boolean] val Optin Boolean value
           # @return [VendorConsentBuilder] self
-          def withSpecialFeatureOptIns(id, val)
+          def withSpecialFeatureOptIn(id, val)
             @consent_core.set_special_feature_opt_in(id, val)
+            self
+          end
+
+          #
+          # Set SpecialFeatureOptIn with an array
+          #
+          # @param [Array] arr index array
+          # @return [VendorConsentBuilder] self
+          #
+          def withSpecialFeatureOptIns(arr)
+            arr.each do |id|
+              @consent_core.set_special_feature_opt_in(id, true)
+            end
             self
           end
 
@@ -138,6 +151,19 @@ module IABConsentString
           end
 
           #
+          # Set PurposeConsent wit an array of index
+          #
+          # @param [Array] arr index array
+          # @return [VendorConsentBuilder] self
+          #
+          def withPurposeConsents(arr)
+            arr.each do |id|
+              @consent_core.set_purposes_consented(id, true)
+            end
+            self
+          end
+
+          #
           # The Purpose’s transparency requirements are met for each Purpose on the legal 
           # basis of legitimate interest and the user has not exercised their 
           # “Right to Object” to that Purpose.
@@ -150,8 +176,21 @@ module IABConsentString
           # @param [Boolean] val true :  legitimate interest established. false : legitimate interest was NOT established or it was established but user exercised their “Right to Object” to the Purpose 
           # @return [VendorConsentBuilder] self
           #
-          def withPurposesLITransparency(id, val)
+          def withPurposeLITransparency(id, val)
             @consent_core.set_purposes_li_transparency(id, val)
+            self
+          end
+
+          #
+          # Set PurposesLITransparency wit an array of index
+          #
+          # @param [Array] arr index array
+          # @return [VendorConsentBuilder] self
+          #
+          def withPurposesLITransparency(arr)
+            arr.each do |id|
+              @consent_core.set_purposes_li_transparency(id, true)
+            end
             self
           end
 

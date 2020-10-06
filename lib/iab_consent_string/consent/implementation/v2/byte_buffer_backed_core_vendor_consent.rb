@@ -60,6 +60,10 @@ module IABConsentString
             @bits_core.getBit(IABConsentString::GDPRConstantsV2::Core::SPECIAL_FEATURE_OPT_INS_OFFSET + id - 1);
           end
 
+          def getSpecialFeatureOptIns
+            return (1..IABConsentString::GDPRConstantsV2::Core::SPECIAL_FEATURE_OPT_INS_SIZE).select { |i| self.isSpecialFeatureOptIn(i) }
+          end
+
           def isPurposesConsented(purpose_id)
             if ((purpose_id < 1) || (purpose_id > IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_SIZE))
               return false
@@ -71,7 +75,7 @@ module IABConsentString
             return (1..IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_SIZE).select { |i| self.isPurposesConsented(i) }
           end
 
-          def isPurposesLITransparency(purpose_id)
+          def isPurposeLITransparency(purpose_id)
             if ((purpose_id < 1) || (purpose_id > IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE))
               return false
             end
@@ -79,7 +83,7 @@ module IABConsentString
           end
 
           def getPurposesLiTransparency
-            return (1..IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE).select { |i| self.isPurposesLITransparency(i) }
+            return (1..IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE).select { |i| self.isPurposeLITransparency(i) }
           end
 
           def getPurposeOneTreatment

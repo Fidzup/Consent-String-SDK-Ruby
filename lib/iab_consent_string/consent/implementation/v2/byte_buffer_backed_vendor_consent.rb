@@ -67,7 +67,7 @@ module IABConsentString
               \tPurposesConsentedSpecialFeatureOptIn:
               #{insepectListAttr("isPurposesConsented", IABConsentString::GDPRConstantsV2::Core::PURPOSES_CONSENT_SIZE)}
               \tPurposesLITransparency
-              #{insepectListAttr("isPurposesLITransparency", IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE)}
+              #{insepectListAttr("isPurposeLITransparency", IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE)}
               \tPurposeOneTreatment:  #{self.getPurposeOneTreatment}
               \tPublisherCC:  #{self.getPublisherCC}
               \tVendorConsent:  #{self.getVendorConsent.inspect}

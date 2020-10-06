@@ -252,7 +252,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
    assert_equal(false,vendorConsent.isPurposesConsented(24))
   end
 
-  def test_isPurposesLITransparency
+  def test_isPurposeLITransparency
     # Given: vendor list version of 150
     binaryString = "000011" + # Version
       "001110001110110011010000101000000000" + # Created
@@ -274,32 +274,32 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
    vendorConsent = IABConsentString::Consent::Implementation::V2::ByteBufferBackedVendorConsent.new(IABConsentString::Util::Utils.fromBinaryString(binaryString))
 
    # Then: correct vendor list version is returned
-   assert_equal(true,vendorConsent.isPurposesLITransparency(2))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(3))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(6))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(7))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(10))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(11))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(14))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(15))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(18))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(19))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(22))
-   assert_equal(true,vendorConsent.isPurposesLITransparency(23))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(2))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(3))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(6))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(7))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(10))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(11))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(14))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(15))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(18))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(19))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(22))
+   assert_equal(true,vendorConsent.isPurposeLITransparency(23))
    assert_equal([2,3,6,7,10,11,14,15,18,19,22,23],vendorConsent.getPurposesLiTransparency)
 
-   assert_equal(false,vendorConsent.isPurposesLITransparency(1))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(4))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(5))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(8))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(9))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(12))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(13))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(16))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(17))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(20))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(21))
-   assert_equal(false,vendorConsent.isPurposesLITransparency(24))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(1))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(4))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(5))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(8))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(9))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(12))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(13))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(16))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(17))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(20))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(21))
+   assert_equal(false,vendorConsent.isPurposeLITransparency(24))
   end
 
   def test_getPurposeOneTreatment

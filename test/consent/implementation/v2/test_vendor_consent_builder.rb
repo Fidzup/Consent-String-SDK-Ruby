@@ -83,17 +83,25 @@ class VendorConsentV2BuilderTest < Minitest::Test
     assert_equal(publisher_cc,consent.getPublisherCC())
   end
 
-  def test_withSpecialFeatureOptIns
+  def test_withSpecialFeatureOptIn
     ids = (1..12).to_a.sample(4)
     vals = Array.new(4) { [true, false].sample }
     4.times do |i|
-      @consent_builder.withSpecialFeatureOptIns(ids[i], vals[i])
+      @consent_builder.withSpecialFeatureOptIn(ids[i], vals[i])
     end
     consent = @consent_builder.build
     4.times do |i|
       assert_equal(vals[i],consent.isSpecialFeatureOptIn(ids[i]))
     end
   end
+
+
+  def test_withSpecialFeatureOptIns
+    ids = Array.new(5) { |i| rand(1..12)}.uniq.sort
+    consent = @consent_builder.withSpecialFeatureOptIns(ids).build
+    assert_equal(ids,consent.getSpecialFeatureOptIns)
+  end
+
 
   def test_withPurposeConsent
     ids = (1..24).to_a.sample(4)
@@ -107,16 +115,28 @@ class VendorConsentV2BuilderTest < Minitest::Test
     end
   end
 
-  def test_withPurposesLITransparency
+  def test_withPurposeConsents
+    ids = Array.new(5) { |i| rand(1..24)}.uniq.sort
+    consent = @consent_builder.withPurposeConsents(ids).build
+    assert_equal(ids,consent.getAllowedPurposeIds)
+  end
+
+  def test_withPurposeLITransparency
     ids = (1..24).to_a.sample(4)
     vals = Array.new(4) { [true, false].sample }
     4.times do |i|
-      @consent_builder.withPurposesLITransparency(ids[i], vals[i])
+      @consent_builder.withPurposeLITransparency(ids[i], vals[i])
     end
     consent = @consent_builder.build
     4.times do |i|
-      assert_equal(vals[i],consent.isPurposesLITransparency(ids[i]))
+      assert_equal(vals[i],consent.isPurposeLITransparency(ids[i]))
     end
+  end
+
+  def test_withPurposesLITransparency
+    ids = Array.new(5) { |i| rand(1..24)}.uniq.sort
+    consent = @consent_builder.withPurposesLITransparency(ids).build
+    assert_equal(ids,consent.getPurposesLiTransparency)
   end
 
   def test_withBinaryVendorConsent
