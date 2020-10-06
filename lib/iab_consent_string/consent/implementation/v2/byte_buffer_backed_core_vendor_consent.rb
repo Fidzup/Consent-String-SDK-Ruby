@@ -79,7 +79,7 @@ module IABConsentString
           end
 
           def getPurposesLiTransparency
-            @bits_core.getInt(IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_OFFSET,IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE)
+            return (1..IABConsentString::GDPRConstantsV2::Core::PURPOSES_LI_TRANSPARENCY_SIZE).select { |i| self.isPurposesLITransparency(i) }
           end
 
           def getPurposeOneTreatment

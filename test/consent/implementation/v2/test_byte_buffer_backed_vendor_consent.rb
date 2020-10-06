@@ -286,6 +286,7 @@ class ByteBufferBackedVendorConsentV2Test < Minitest::Test
    assert_equal(true,vendorConsent.isPurposesLITransparency(19))
    assert_equal(true,vendorConsent.isPurposesLITransparency(22))
    assert_equal(true,vendorConsent.isPurposesLITransparency(23))
+   assert_equal([2,3,6,7,10,11,14,15,18,19,22,23],vendorConsent.getPurposesLiTransparency)
 
    assert_equal(false,vendorConsent.isPurposesLITransparency(1))
    assert_equal(false,vendorConsent.isPurposesLITransparency(4))
