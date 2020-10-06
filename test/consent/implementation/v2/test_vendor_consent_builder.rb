@@ -71,6 +71,18 @@ class VendorConsentV2BuilderTest < Minitest::Test
     assert_equal(use_non_standard_stack,consent.getUseNonStandardStacks())
   end
 
+  def test_withPurposeOneTreatment
+    purpose_one_treatment = [true, false].sample
+    consent = @consent_builder.withPurposeOneTreatment(purpose_one_treatment).build
+    assert_equal(purpose_one_treatment,consent.getPurposeOneTreatment())
+  end
+
+  def test_withwithPublisherCC
+    publisher_cc = ['FR', 'DE', 'GG', 'GB'].sample
+    consent = @consent_builder.withPublisherCC(publisher_cc).build
+    assert_equal(publisher_cc,consent.getPublisherCC())
+  end
+
   def test_withSpecialFeatureOptIns
     ids = (1..12).to_a.sample(4)
     vals = Array.new(4) { [true, false].sample }

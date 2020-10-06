@@ -156,6 +156,29 @@ module IABConsentString
           end
 
           #
+          # CMPs can use the PublisherCC field to indicate the legal jurisdiction the publisher is under to help vendors determine whether the vendor needs consent for Purpose 1.
+          # In a globally-scoped TC string, this field must always have a value of 0. When a CMP encounters a globally-scoped TC String with PurposeOneTreatment=1 then it is considered 
+          # invalid and the CMP must discard it and re-establish transparency and consent. 
+          # @param [Boolean] purposeOneTreatment 1 Purpose 1 was NOT disclosed at all. 0 Purpose 1 was disclosed commonly as consent as expected by the Policies.
+          # @return [VendorConsentBuilder] self
+          #
+          def withPurposeOneTreatment(purposeOneTreatment)
+            @consent_core.purpose_one_treatment = purposeOneTreatment
+            self
+          end
+
+          #
+          # The country code of the country that determines legislation of reference. Commonly, this corresponds to the country in which the publisher’s business entity is established.
+          # Each letter is encoded as 6 bits, a=0..z=25.
+          # @param [String] publisherCC ISO 3166-1 alpha-2 code
+          # @return [VendorConsentBuilder] self
+          #
+          def withPublisherCC(publisherCC)
+            @consent_core.publisher_cc = publisherCC
+            self
+          end
+
+          #
           # Add a Vendor consent section as a bit field
           #
           # @return [VendorConsentBuilder] self
@@ -174,7 +197,7 @@ module IABConsentString
             @consent_core.init_vendor_consent(ranged: true)
             self
           end
-  
+
           #
           # Add a vendor in vendor section segment
           #
